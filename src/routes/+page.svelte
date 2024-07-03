@@ -1,13 +1,13 @@
 <script>
  import axios from "axios";
     import { onMount, afterUpdate } from "svelte";
-    import Circle from "./lib/Circle.svelte";
-    import LengthInput from "./lib/LengthInput.svelte";
-    import Start from "./lib/Start.svelte";
-    import Stop from "./lib/Stop.svelte";
+    import Circle from "$lib/Circle.svelte";
+    import LengthInput from "$lib/LengthInput.svelte";
+    import Start from "$lib/Start.svelte";
+    import Stop from "$lib/Stop.svelte";
     import Login from "$lib/Login.svelte";
-    import { hours, currPerc, succeeded, startDate, futureDate, hasStarted, fastID, remHours, remMins, remSeconds } from './lib/stores';
-    import { aws_stages } from "./aws/stages";
+    import { hours, currPerc, succeeded, startDate, futureDate, hasStarted, fastID, remHours, remMins, remSeconds } from '$lib/stores';
+    import { aws_stages } from "../aws/stages";
     
 
     let startedApp = false;
@@ -152,5 +152,4 @@ h1, p {
     </div>    
     {/if}
 
-
-</script>
+</div>
