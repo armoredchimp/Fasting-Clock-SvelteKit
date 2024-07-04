@@ -6,15 +6,15 @@
     import Start from "$lib/Start.svelte";
     import Stop from "$lib/Stop.svelte";
     import Login from "$lib/Login.svelte";
+    import Register from "$lib/Register.svelte";
     import { hours, currPerc, succeeded, startDate, futureDate, hasStarted, fastID, remHours, remMins, remSeconds } from '$lib/stores';
     import { aws_stages } from "../aws/stages";
-    import { user } from "$lib/userStore";
+    import { user } from "$lib/auth/userStore";
 	import Logout from "$lib/Logout.svelte";
     
 
     let startedApp = false;
     let hoursApp = 0;
-    let totalApp = 0;
     let start = new Date();
     let ending = new Date();
     
@@ -42,7 +42,6 @@
 
     function handleStart(){
         console.log('start received')
-        totalApp = hoursApp * 60 * 60 * 1000;
         startDate.update((n)=> start = n)
         futureDate.update((n)=> ending = n)
         startDisplay = start.toLocaleString()
@@ -92,7 +91,7 @@
                 "StartDate": start.getTime(),
                 "EndDate": ending.getTime(),
                 "InProgress": true,
-                "PercentCompleted": succeeded ? 100 : 0,
+                "PercentCompleted": $succeeded ? 100 : 0,
                 "TotalDuration": hoursApp 
             }
         }
@@ -121,15 +120,15 @@
 }
 
 
-h1, p {
+h1, h2, p {
     font-family: 'Plus Jakarta Sans Variable';
 }
 
 
 </style>
-<Login/>
 {#if $user !== null}
-<Logout/>
+    <h2>Logged in as {$user.username}</h2>
+    <Logout />        
 {/if}
 <div style:margin="0 auto" style:max-width="40rem" style:position="relative" style:font-family='Plus Jakarta Sans Variable'>
     <h1 style:margin-left="8.5rem" style:margin-bottom="3rem">Fasting Clock</h1>
@@ -142,7 +141,8 @@ h1, p {
         {#if $user !== null}
         <Start on:started={handleStart}/>
         {:else}
-        <h1>Log in to begin a fast</h1> 
+        <h1 style:margin-bottom="3rem">Log in to begin a fast</h1> 
+        <Login />
         {/if}   
         </div>
     <div style:margin-top="5rem" style:margin-left="4rem">

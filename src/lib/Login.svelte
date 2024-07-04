@@ -1,35 +1,22 @@
 <script>
     import { createForm } from "svelte-forms-lib";
-    import { signUp, confirmSignUp, signIn, getCurrentUser } from 'aws-amplify/auth';
-    import { user } from '$lib/userStore';
-
-    let signingUp = false;
-    let needsConfirm = false;
-
+    import { signIn, getCurrentUser } from 'aws-amplify/auth';
+    import { user, userStore } from '$lib/auth/userStore';
+   
     const { form, errors, handleChange, handleSubmit } = createForm({
         initialValues: {
             username: '',
-            email: '',
             password: '',
-            confirmationCode: ''
         },
-        validate: values => {
+        validate: (values) => {
             let errors = {};
             if (!values.username) errors.username = 'Username is required';
             if (!values.password) errors.password = 'Password is required';
-            if (signingUp && !values.email) errors.email = 'Email is required';
-            if (needsConfirm && !values.confirmationCode) errors.confirmationCode = 'Confirmation code is required';
             return errors;
         },
-        onSubmit: async values => {
+        onSubmit: async (values) => {
             try {
-                if (needsConfirm) {
-                    await handleConfirm(values);
-                } else if (signingUp == false) {
-                    await handleRegister(values);
-                } else {
-                    await handleLogin(values);
-                }
+                await handleLogin(values);
             } catch (err) {
                 console.error('Error', err);
             }
@@ -37,131 +24,107 @@
     });
 
     async function handleLogin(values) {
-        const { isSignedIn, nextStep } = await signIn({ 
-            username: values.username,
-            password: values.password,
-            options: {
-                userAttributes: {
-                    email: values.email,
-                }
-            } 
-        });
-        if (isSignedIn) {
-            signingUp = false
-            const currentUser = await getCurrentUser();
-            user.set(currentUser);
-        } else {
-            console.log('Failed to Login');
+        try {
+            const { isSignedIn, nextStep } = await signIn({
+                username: values.username,
+                password: values.password,
+            });
+            if (isSignedIn) {
+                const currentUser = await getCurrentUser();
+                userStore.setUser(currentUser);
+            } else {
+                console.log('Failed to Login');
+            }
+        } catch(err) {
+            console.error('Login error', err);
         }
     }
-
-    async function handleRegister(values) {
-        const { isSignUpComplete, userId, nextStep } = await signUp({
-            username: values.username,
-            password: values.password,
-            options: {
-                userAttributes: {
-                    email: values.email,
-                }
-            }    
-        });
-        if (!isSignUpComplete) {
-            signingUp = true
-            needsConfirm = true;
-        } else {
-            await handleLogin(values);
-        }
-    }
-
-    async function handleConfirm(values) {
-        const { isSignUpComplete, nextStep } = await confirmSignUp({
-            username: values.username,
-            confirmationCode: values.confirmationCode
-        });
-        if (isSignUpComplete) {
-            needsConfirm = false;
-            await handleLogin(values);
-        }
-    }
-
-    // function toggleSignUp() {
-    //     signingUp = !signingUp;
-    //     needsConfirm = false;
-    // }
 </script>
 
-
+<style>
+    .login-container {
+        background-color: #e3f2fd;
+        border-radius: 8px;
+        padding: 20px;
+        max-width: 400px;
+        margin: 0 auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    h2 {
+        color: #1565c0;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #0d47a1;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #90caf9;
+        border-radius: 4px;
+    }
+    .error {
+        color: #c62828;
+        font-size: 0.8em;
+        margin-top: 5px;
+    }
+    button {
+        background-color: #2196f3;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    button:hover {
+        background-color: #1e88e5;
+    }
+</style>
 {#if $user !== null}
     <h1>Logged in as {$user.username}</h1>
-    
 {:else}
-<form on:submit={handleSubmit}>
-    <div>
-        <label for="username">Username</label>
-        <input
-            id="username"
-            name="username"
-            type="username"
-            on:change={handleChange}
-            bind:value={$form.username}
-        />
-        {#if $errors.username}
-            <span class="error">{$errors.username}</span>  
-        {/if}            
+    <div class="login-container">
+        <form on:submit|preventDefault={handleSubmit}>
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    on:change={handleChange}
+                    bind:value={$form.username}
+                />
+                {#if $errors.username}
+                    <span class="error">{$errors.username}</span>  
+                {/if}            
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    on:change={handleChange}
+                    bind:value={$form.password}
+                />
+                {#if $errors.password}
+                    <span class="error">{$errors.password}</span>  
+                {/if}    
+            </div>
+            <button type="submit">Login</button>
+        </form>
     </div>
-    <div>
-        <label for="email">Email Address</label>
-        <input
-            id="email"
-            name="email"
-            type="email"
-            on:change={handleChange}
-            bind:value={$form.email}
-        />
-        {#if $errors.email}
-            <span class="error">{$errors.email}</span>  
-        {/if}            
-    </div>
-    <div>
-        <label for="password">Password</label>
-        <input
-            id="password"
-            name="password"
-            type="password"
-            on:change={handleChange}
-            bind:value={$form.password}
-        />
-        {#if $errors.password}
-            <span class="error">{$errors.password}</span>  
-        {/if}    
-    </div>
-   
-    {#if needsConfirm}
-        <div>
-            <label for="confirmationCode">Confirmation Code</label>
-            <input
-                id="confirmationCode"
-                name="confirmationCode"
-                type="text"
-                on:change={handleChange}
-                bind:value={$form.confirmationCode}
-            />
-            {#if $errors.confirmationCode}
-                <span class="error">{$errors.confirmationCode}</span>
-            {/if}    
-        </div>
-    {/if}
-   
-    <button type="submit">
-        {#if needsConfirm}
-            Confirm
-        {:else if signingUp == false}
-            Sign Up
-        {:else}
-            Login
-        {/if}
-    </button>
-     
- 
-</form>
 {/if}

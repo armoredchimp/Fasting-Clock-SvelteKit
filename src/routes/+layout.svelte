@@ -3,7 +3,7 @@ import { Amplify } from 'aws-amplify';
 import amplifyConfig from '$lib/amplifyConfig';
 import { getCurrentUser, fetchAuthSession} from 'aws-amplify/auth';
 import { onMount } from 'svelte';
-import { user } from '$lib/userStore';
+import { userStore } from '$lib/auth/userStore';
 
 Amplify.configure(amplifyConfig);
 
@@ -18,10 +18,13 @@ async function checkAuth(){
         const {tokens} = await fetchAuthSession();
         if(tokens){
             const currentUser = await getCurrentUser();
-            user.set(currentUser)
+            userStore.setUser(currentUser)
+        }else {
+            userStore.reset()
         }
     } catch (err){
         console.error('Not authenticated', err)
+        userStore.reset()
     }
 }
 
