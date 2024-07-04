@@ -8,12 +8,14 @@
 
     const { form, errors, handleChange, handleSubmit } = createForm({
         initialValues: {
+            username: '',
             email: '',
             password: '',
             confirmationCode: ''
         },
         validate: values => {
             let errors = {};
+            if (!values.username) errors.username = 'Username is required';
             if (!values.password) errors.password = 'Password is required';
             if (signingUp && !values.email) errors.email = 'Email is required';
             if (needsConfirm && !values.confirmationCode) errors.confirmationCode = 'Confirmation code is required';
@@ -23,7 +25,7 @@
             try {
                 if (needsConfirm) {
                     await handleConfirm(values);
-                } else if (signingUp) {
+                } else if (signingUp == false) {
                     await handleRegister(values);
                 } else {
                     await handleLogin(values);
@@ -36,10 +38,16 @@
 
     async function handleLogin(values) {
         const { isSignedIn, nextStep } = await signIn({ 
-            username: values.email, 
-            password: values.password 
+            username: values.username,
+            password: values.password,
+            options: {
+                userAttributes: {
+                    email: values.email,
+                }
+            } 
         });
         if (isSignedIn) {
+            signingUp = false
             const currentUser = await getCurrentUser();
             user.set(currentUser);
         } else {
@@ -49,10 +57,16 @@
 
     async function handleRegister(values) {
         const { isSignUpComplete, userId, nextStep } = await signUp({
-            username: values.email,
+            username: values.username,
             password: values.password,
+            options: {
+                userAttributes: {
+                    email: values.email,
+                }
+            }    
         });
         if (!isSignUpComplete) {
+            signingUp = true
             needsConfirm = true;
         } else {
             await handleLogin(values);
@@ -61,7 +75,7 @@
 
     async function handleConfirm(values) {
         const { isSignUpComplete, nextStep } = await confirmSignUp({
-            username: values.email,
+            username: values.username,
             confirmationCode: values.confirmationCode
         });
         if (isSignUpComplete) {
@@ -70,13 +84,31 @@
         }
     }
 
-    function toggleSignUp() {
-        signingUp = !signingUp;
-        needsConfirm = false;
-    }
+    // function toggleSignUp() {
+    //     signingUp = !signingUp;
+    //     needsConfirm = false;
+    // }
 </script>
 
+
+{#if $user !== null}
+    <h1>Logged in as {$user.username}</h1>
+    
+{:else}
 <form on:submit={handleSubmit}>
+    <div>
+        <label for="username">Username</label>
+        <input
+            id="username"
+            name="username"
+            type="username"
+            on:change={handleChange}
+            bind:value={$form.username}
+        />
+        {#if $errors.username}
+            <span class="error">{$errors.username}</span>  
+        {/if}            
+    </div>
     <div>
         <label for="email">Email Address</label>
         <input
@@ -123,14 +155,13 @@
     <button type="submit">
         {#if needsConfirm}
             Confirm
-        {:else if signingUp}
+        {:else if signingUp == false}
             Sign Up
         {:else}
             Login
         {/if}
     </button>
      
-    <button type="button" on:click={toggleSignUp}>
-        {signingUp ? 'Already have an account? Login' : 'Need an account? Sign Up'}
-    </button>
+ 
 </form>
+{/if}

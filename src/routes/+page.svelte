@@ -1,5 +1,5 @@
 <script>
- import axios from "axios";
+    import axios from "axios";
     import { onMount, afterUpdate } from "svelte";
     import Circle from "$lib/Circle.svelte";
     import LengthInput from "$lib/LengthInput.svelte";
@@ -8,6 +8,8 @@
     import Login from "$lib/Login.svelte";
     import { hours, currPerc, succeeded, startDate, futureDate, hasStarted, fastID, remHours, remMins, remSeconds } from '$lib/stores';
     import { aws_stages } from "../aws/stages";
+    import { user } from "$lib/userStore";
+	import Logout from "$lib/Logout.svelte";
     
 
     let startedApp = false;
@@ -86,7 +88,7 @@
         let data = {
             "pathParameters": {
                 "FastID": $fastID,
-                "UserID": "Matt",
+                "UserID": $user?.username,
                 "StartDate": start.getTime(),
                 "EndDate": ending.getTime(),
                 "InProgress": true,
@@ -126,6 +128,9 @@ h1, p {
 
 </style>
 <Login/>
+{#if $user !== null}
+<Logout/>
+{/if}
 <div style:margin="0 auto" style:max-width="40rem" style:position="relative" style:font-family='Plus Jakarta Sans Variable'>
     <h1 style:margin-left="8.5rem" style:margin-bottom="3rem">Fasting Clock</h1>
     <Circle 
@@ -134,7 +139,11 @@ h1, p {
     />
     {#if startedApp === false && $succeeded === false}    
     <div style:position="absolute" style:right="-15rem" style:top="18rem" >
-        <Start on:started={handleStart}/>    
+        {#if $user !== null}
+        <Start on:started={handleStart}/>
+        {:else}
+        <h1>Log in to begin a fast</h1> 
+        {/if}   
         </div>
     <div style:margin-top="5rem" style:margin-left="4rem">
         <LengthInput/>
