@@ -1,6 +1,6 @@
 <script>
     import { createForm } from "svelte-forms-lib";
-    import { signUp, confirmSignUp } from 'aws-amplify/auth';
+    import { signUp, confirmSignUp, signIn, getCurrentUser } from 'aws-amplify/auth';
     import { userStore } from '$lib/auth/userStore';
    
     let needsConfirm = false;
@@ -64,65 +64,57 @@
                 completed: true,
                 username: values.username
             });
+            await regLogin(values)
         }
     }
+
+    async function regLogin(values) {
+        try {
+            const { isSignedIn, nextStep } = await signIn({
+                username: values.username,
+                password: values.password,
+            });
+            if (isSignedIn) {
+                const currentUser = await getCurrentUser();
+                userStore.setUser(currentUser);
+            } else {
+                console.log('Failed to Login after registration');
+            }
+        } catch(err) {
+            console.error('Login error after registration', err);
+        }
+}
 </script>
 
 <style>
     .reg-cont {
-        background-color: #e8f5e9;
-        border-radius: 8px;
-        padding: 20px;
-        max-width: 400px;
-        margin: 0 auto;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    form {
         display: flex;
-        flex-direction: column;
+        align-items: center;
     }
-
-    h2 {
-        color: #2e7d32;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
     .form-group {
-        margin-bottom: 15px;
+        flex: 1;
+        margin-bottom: 0.7rem;
     }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        color: #1b5e20;
-    }
-
     input {
         width: 100%;
-        padding: 8px;
+        padding: 5px;
         border: 1px solid #a5d6a7;
         border-radius: 4px;
     }
-
     .error {
         color: #c62828;
-        font-size: 0.8em;
-        margin-top: 5px;
+        font-size: 0.7em;
     }
-
     button {
         background-color: #4caf50;
         color: white;
-        padding: 10px;
+        padding: 5px 10px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 14px;
         transition: background-color 0.3s;
     }
-
     button:hover {
         background-color: #45a049;
     }
@@ -130,14 +122,12 @@
 
 <div class="reg-cont">
     <form on:submit|preventDefault={handleSubmit}>
-        <h2>Register</h2>
-
         <div class="form-group">
-            <label for="username">Username</label>
             <input
                 type="text"
                 id="username"
                 name="username"
+                placeholder="Username"
                 bind:value={$form.username}
                 on:change={handleChange}
             />
@@ -147,11 +137,11 @@
         </div>
 
         <div class="form-group">
-            <label for="email">Email</label>
             <input
                 type="email"
                 id="email"
                 name="email"
+                placeholder="Email"
                 bind:value={$form.email}
                 on:change={handleChange}
             />
@@ -161,11 +151,11 @@
         </div>
 
         <div class="form-group">
-            <label for="password">Password</label>
             <input
                 type="password"
                 id="password"
                 name="password"
+                placeholder="Password"
                 bind:value={$form.password}
                 on:change={handleChange}
             />
@@ -176,11 +166,11 @@
 
         {#if needsConfirm}
             <div class="form-group">
-                <label for="confirmationCode">Confirmation Code</label>
                 <input
                     type="text"
                     id="confirmationCode"
                     name="confirmationCode"
+                    placeholder="Confirmation Code"
                     bind:value={$form.confCode}
                     on:change={handleChange}
                 />

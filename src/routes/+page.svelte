@@ -9,7 +9,7 @@
     import Register from "$lib/Register.svelte";
     import { hours, currPerc, succeeded, startDate, futureDate, hasStarted, fastID, remHours, remMins, remSeconds } from '$lib/stores';
     import { aws_stages } from "../aws/stages";
-    import { user } from "$lib/auth/userStore";
+    import { user, registrationStatus } from "$lib/auth/userStore";
 	import Logout from "$lib/Logout.svelte";
     
 
@@ -114,6 +114,7 @@
         font-family: 'Plus Jakarta Sans Variable';
         font-style: normal;
         font-display: swap;
+        /* color: #4777ad4b; */
         font-weight: 200 800;
         src: url(https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
         unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
@@ -124,14 +125,53 @@ h1, h2, p {
     font-family: 'Plus Jakarta Sans Variable';
 }
 
+    .top-container {
+        display: flex;
+        justify-content: space-between;
+        /* background-color: #4777ad4b; */
+        padding: 0.5rem;
+        border-radius: 0.3rem;
+        height: 10rem;
+        margin-bottom: 3rem;
+    }
 
+    .auth-section {
+        width: 10rem;
+    }
+
+    .title-container {
+        /* position: relative; */
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .title {
+        font-size: 2.4rem;
+        text-overflow: ellipsis;  
+        white-space: no-wrap;
+        /* position: absolute; */
+        transform: translateX(-5.5rem);
+
+    }
 </style>
-{#if $user !== null}
+<div class="top-container" >
+    <div class="auth-section">
+    {#if $user !== null}
     <h2>Logged in as {$user.username}</h2>
-    <Logout />        
-{/if}
+    <Logout /> 
+    {:else}
+    <Register />       
+    {/if}
+    </div>
+    <div class="title-container">
+        <h1 class="title">Fasting Clock</h1>
+    </div>
+    <div style="width: 10rem"></div>
+</div>
+
 <div style:margin="0 auto" style:max-width="40rem" style:position="relative" style:font-family='Plus Jakarta Sans Variable'>
-    <h1 style:margin-left="8.5rem" style:margin-bottom="3rem">Fasting Clock</h1>
     <Circle 
     
         
