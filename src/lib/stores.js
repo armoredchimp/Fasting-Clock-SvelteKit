@@ -6,7 +6,6 @@ export const startDate = writable(new Date());
 export const futureDate = writable(new Date());
 export const hasStarted = writable(false);
 export const succeeded = writable(false);
-export const fastID = writable(0);
 
 export const time = readable(new Date(), function start(set) {
 	const interval = setInterval(() => {

@@ -2,7 +2,8 @@
     import { createForm } from "svelte-forms-lib";
     import { signIn, getCurrentUser } from 'aws-amplify/auth';
     import { user, userStore } from '$lib/auth/userStore';
-   
+
+
     const { form, errors, handleChange, handleSubmit } = createForm({
         initialValues: {
             username: '',
@@ -33,6 +34,8 @@
             if (isSignedIn) {
                 const currentUser = await getCurrentUser();
                 userStore.setUser(currentUser);
+                //Refresh the page to trigger the +layout mount functionality and check for an active fast
+                window.location.reload();
             } else {
                 console.log('Failed to Login');
             }

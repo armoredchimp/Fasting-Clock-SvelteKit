@@ -7,15 +7,13 @@
 	import { afterUpdate } from 'svelte';
 	
 
-    let currPerc_value = 50;
+    
     let remainingTime = 0;
     // let end = new Date()
 
   
 
-    currPerc.subscribe((value)=>{
-        currPerc_value = value;
-    })
+   
 
    
 
@@ -85,7 +83,7 @@
 </style>
 
 <div class="circle">
-    <div class="overlay" style="height: {currPerc_value}%; transition: 0.1s ease-in"></div>
+    <div class="overlay" style="height: {$currPerc}%; transition: 0.1s ease-in"></div>
     {#if $hasStarted === false && $succeeded === false}
     <div class="clock" >
         <Clock />
@@ -95,12 +93,12 @@
     </div>
     {:else if $remSeconds > 0}
     <div class="perc">
-        <h1>{currPerc_value.toFixed(2)} % remaining</h1>
+        <h1>{$currPerc.toFixed(2)} % remaining</h1>
         <h2>{$remSeconds} {$remSeconds === 1 ? 'second' : 'seconds'} remain</h2>
     </div>
     {:else}
     <div class="perc">
-        <h1>{currPerc_value.toFixed(2)} % remaining</h1>
+        <h1>{$currPerc.toFixed(2)} % remaining</h1>
     </div>
     {/if}
 

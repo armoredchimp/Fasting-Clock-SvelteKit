@@ -1,60 +1,48 @@
 <script>
     import axios from "axios";
-    import { onMount, afterUpdate } from "svelte";
+    import { afterUpdate } from "svelte";
     import Circle from "$lib/Circle.svelte";
     import LengthInput from "$lib/LengthInput.svelte";
     import Start from "$lib/Start.svelte";
     import Stop from "$lib/Stop.svelte";
     import Login from "$lib/Login.svelte";
     import Register from "$lib/Register.svelte";
-    import { hours, currPerc, succeeded, startDate, futureDate, hasStarted, fastID, remHours, remMins, remSeconds } from '$lib/stores';
+    import { hours, currPerc, succeeded, startDate, futureDate, hasStarted, remHours, remMins, remSeconds } from '$lib/stores';
     import { aws_stages } from "../aws/stages";
     import { user, registrationStatus } from "$lib/auth/userStore";
 	import Logout from "$lib/Logout.svelte";
     
 
     let startedApp = false;
-    let hoursApp = 0;
-    let start = new Date();
-    let ending = new Date();
+    
     
     
   
     
     
-    hours.subscribe((n)=> hoursApp = n)
     hasStarted.subscribe((n)=> startedApp = n)
 
-    let startDisplay = ''
-    let endingDisplay = ''
+    
 
-    onMount(()=>{
-        if($fastID === 0){
-            $fastID = randomNumber()
-        }
-        console.log($fastID)
-    })
-       
-
-    function randomNumber(){
-        return Math.floor(Math.random() * (1000000 -10000) + 10000)
-    }
+   
 
     function handleStart(){
-        console.log('start received')
-        startDate.update((n)=> start = n)
-        futureDate.update((n)=> ending = n)
-        startDisplay = start.toLocaleString()
-        endingDisplay = ending.toLocaleString()
+        console.log('start received') 
+        $succeeded = false;
         $currPerc = 100;
         
-        // putFast()
+        putFast()
         calcRemTime()
     }
 
     function handleStop(){
         console.log('stop received')
+        startedApp = false;
+        $hasStarted = false;
+        $succeeded = false;
+        putFast()
         $currPerc = 50;
+        $hours = 12;
     }
   
     function calcRemTime(){
@@ -86,13 +74,13 @@
     async function putFast(){
         let data = {
             "pathParameters": {
-                "FastID": $fastID,
                 "UserID": $user?.username,
-                "StartDate": start.getTime(),
-                "EndDate": ending.getTime(),
-                "InProgress": true,
-                "PercentCompleted": $succeeded ? 100 : 0,
-                "TotalDuration": hoursApp 
+                "StartDate": $startDate.getTime(),
+                "EndDate": $futureDate.getTime(),
+                "InProgress": $hasStarted ? true : false,
+                "PercentRemaining": $currPerc,
+                "TotalDuration": $hours,
+                "Suceeded": $succeeded
             }
         }
         let url = aws_stages.API_PUT_URL
@@ -161,6 +149,8 @@ h1, h2, p {
     {#if $user !== null}
     <h2>Logged in as {$user.username}</h2>
     <Logout /> 
+    <h3>{$hasStarted}</h3>
+    <h3>{$currPerc}</h3>
     {:else}
     <Register />       
     {/if}
@@ -191,13 +181,13 @@ h1, h2, p {
     {:else if $succeeded === false}
     <div style:margin-top="5rem" style:margin-left="3rem">
         <p>There is currently {$remHours} {$remHours === 1 ? 'hour' : 'hours'} and {$remMins % 60} {$remMins === 1 ? 'minute' : 'minutes'} left for the fast.</p>
-        <p>The fast will end at {endingDisplay}.</p>
+        <p>The fast will end at {$futureDate.toLocaleString()}.</p>
     </div>
         <Stop on:stopped={handleStop}/>
     {:else if $succeeded === true}
     <div style:margin-top="5rem" style:margin-left="3rem">
         <p>The fast has been completed, good job!</p>
-        <p>The fast started at {startDisplay} and took {$hours} hours.</p>
+        <p>The fast started at {$startDate.toLocaleString()} and took {$hours} hours.</p>
     </div>    
     {/if}
 
