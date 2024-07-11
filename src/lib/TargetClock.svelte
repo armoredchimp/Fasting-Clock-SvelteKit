@@ -41,9 +41,25 @@
     
     // $: currHour = ($hours + (hour -12)) % 12
 
+
    
 </script>
 
-<h3>Ending Time:</h3>
-<h1>{formatter.format($futureDisplay)}</h1>
+<style>
+
+.label {
+    transform: translateY(-1rem);
+    transform: translateX(3rem);
+}    
+
+.main-clock {
+    transform: translateX(-3rem);
+    font-size: 4rem;
+}    
+    
+</style>
+
+
+<h4 class="label">Ending Time:</h4>
+<h1 class="main-clock">{formatter.format($futureDisplay)}</h1>
 <!-- <h1>{(currHour === 0 ? 12 : currHour) < 10 ? '\u00A0\u00A0' + (currHour === 0 ? 12 : currHour) : (currHour === 0 ? 12 : currHour)} : {min < 10 ? '0' + min : min} : {sec < 10 ? '0' + sec : sec} {amPM2}</h1> -->

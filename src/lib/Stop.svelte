@@ -14,6 +14,6 @@
 
 </script>
 
-<button on:click={terminate} style="width: 20rem; height: 5rem; font-size: 2rem; margin-top: 5rem; margin-left: 4rem;">
+<button on:click={terminate} style="width: 25rem; height: 4rem; font-size: 2rem; margin-top: 5rem; margin-left: 4rem;">
 Stop Fast
 </button>

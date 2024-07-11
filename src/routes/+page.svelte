@@ -2,8 +2,10 @@
     import axios from "axios";
     import { afterUpdate } from "svelte";
     import Circle from "$lib/Circle.svelte";
+    import Clock from "$lib/Clock.svelte";
     import LengthInput from "$lib/LengthInput.svelte";
     import Start from "$lib/Start.svelte";
+    import Stats from "$lib/Stats.svelte";
     import Stop from "$lib/Stop.svelte";
     import Login from "$lib/Login.svelte";
     import Register from "$lib/Register.svelte";
@@ -136,21 +138,36 @@ h1, h2, p {
     }
 
     .title {
-        font-size: 2.4rem;
+        font-size: 3.5rem;
         text-overflow: ellipsis;  
         white-space: no-wrap;
+        margin-top: 5rem;
+        letter-spacing: 0.4rem;
         /* position: absolute; */
-        transform: translateX(-5.5rem);
+        transform: translateX(25.5rem);
 
+    }
+
+    .circle-stats {
+        /* margin: "0 auto";  */
+        max-width: "40rem";  
+        /* position: "relative";  */
+        font-family: 'Plus Jakarta Sans Variable';
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .stats-box {
+        margin-top: 5rem;
     }
 </style>
 <div class="top-container" >
     <div class="auth-section">
     {#if $user !== null}
-    <h2>Logged in as {$user.username}</h2>
-    <Logout /> 
-    <h3>{$hasStarted}</h3>
-    <h3>{$currPerc}</h3>
+    <!-- <h2>Logged in as {$user.username}</h2>
+    <Logout />  -->
+    <!-- <h3>{$hasStarted}</h3>
+    <h3>{$currPerc}</h3> -->
     {:else}
     <Register />       
     {/if}
@@ -161,30 +178,43 @@ h1, h2, p {
     <div style="width: 10rem"></div>
 </div>
 
-<div style:margin="0 auto" style:max-width="40rem" style:position="relative" style:font-family='Plus Jakarta Sans Variable'>
-    <Circle 
-    
-        
-    />
+<div class="circle-stats">
+    <div style:margin-left="1rem">
+    <Circle />
+    </div>
     {#if startedApp === false && $succeeded === false}    
-    <div style:position="absolute" style:right="-15rem" style:top="18rem" >
-        {#if $user !== null}
-        <Start on:started={handleStart}/>
-        {:else}
-        <h1 style:margin-bottom="3rem">Log in to begin a fast</h1> 
-        <Login />
-        {/if}   
-        </div>
-    <div style:margin-top="5rem" style:margin-left="4rem">
+    <div style:position="absolute" style:right="-12rem" style:top="18rem" >
+       
         <LengthInput/>
     </div>
-    {:else if $succeeded === false}
-    <div style:margin-top="5rem" style:margin-left="3rem">
-        <p>There is currently {$remHours} {$remHours === 1 ? 'hour' : 'hours'} and {$remMins % 60} {$remMins === 1 ? 'minute' : 'minutes'} left for the fast.</p>
-        <p>The fast will end at {$futureDate.toLocaleString()}.</p>
+    {:else}
+    <div class="stats-box" >
+       
+        <Stats/>
     </div>
+    {/if}
+</div>
+
+
+    <div style:margin-top="5rem" style:margin-left="26rem">
+        {#if $user !== null && $hasStarted === true}
         <Stop on:stopped={handleStop}/>
-    {:else if $succeeded === true}
+       
+        
+        {:else if $user !== null && $hasStarted === false}
+        <Start on:started={handleStart}/>
+        <div style:width="22rem">
+            <Login />
+        </div>
+        
+        {/if}   
+        </div>
+        
+    
+   
+  
+<div>        
+    {#if $succeeded === true}
     <div style:margin-top="5rem" style:margin-left="3rem">
         <p>The fast has been completed, good job!</p>
         <p>The fast started at {$startDate.toLocaleString()} and took {$hours} hours.</p>

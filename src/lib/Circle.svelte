@@ -45,8 +45,8 @@
    .circle {
     position: relative;
     top: 0;
-    height: 30rem;
-    width: 30rem;
+    height: 40rem;
+    width: 40rem;
     border-radius: 50%;
     overflow: hidden;
     background-color: darkcyan;
@@ -69,36 +69,38 @@
 }
    .target-clock {
     position: absolute;
-    top: 15.5rem;
-    left: 7.5rem;
-    z-index: 0;
+    top: 16.5rem;
+    left: 12.5rem;
+    z-index: 1;
    }
 
    .perc {
     position: absolute;
-    top: 13rem;
-    left: 7.5rem;
+    top: 18.5rem;
+    left: 13rem;
+    z-index: 1;
    }
  
+   h1 {
+    font-size: 4rem;
+    font-weight: bold;
+   }
 </style>
 
 <div class="circle">
     <div class="overlay" style="height: {$currPerc}%; transition: 0.1s ease-in"></div>
     {#if $hasStarted === false && $succeeded === false}
-    <div class="clock" >
-        <Clock />
-    </div>
+   
     <div class="target-clock" >
         <TargetClock />
     </div>
     {:else if $remSeconds > 0}
     <div class="perc">
-        <h1>{$currPerc.toFixed(2)} % remaining</h1>
-        <h2>{$remSeconds} {$remSeconds === 1 ? 'second' : 'seconds'} remain</h2>
+        <h1>{$currPerc.toFixed(2)} %</h1>
     </div>
     {:else}
     <div class="perc">
-        <h1>{$currPerc.toFixed(2)} % remaining</h1>
+        <h1>{$currPerc.toFixed(2)} %</h1>
     </div>
     {/if}
 

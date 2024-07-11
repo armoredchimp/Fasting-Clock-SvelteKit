@@ -8,7 +8,9 @@
     async function logOut(){
         if($user !== null){
             try {
-                await putFast()
+                if($hasStarted) {
+                    await putFast()
+                } 
                 await signOut({ global: true })
                 userStore.reset()
                 $hasStarted = false;

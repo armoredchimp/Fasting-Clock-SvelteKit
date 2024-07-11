@@ -42,7 +42,7 @@
 </style>
 
 
-<button on:click={begin} style="width: 20rem; height: 5rem;"
+<button on:click={begin} style="width: 25rem; height: 4rem;"
 
 >Begin Fast
 
