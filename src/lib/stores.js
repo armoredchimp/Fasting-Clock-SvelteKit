@@ -6,6 +6,7 @@ export const startDate = writable(new Date());
 export const futureDate = writable(new Date());
 export const hasStarted = writable(false);
 export const succeeded = writable(false);
+export const loading = writable(false);
 
 export const time = readable(new Date(), function start(set) {
 	const interval = setInterval(() => {
@@ -16,6 +17,10 @@ export const time = readable(new Date(), function start(set) {
 		clearInterval(interval);
 	};
 });
+
+export const totalTime = derived([time, startDate], ([$time, $startDate]) =>
+	Math.max(0, $time - $startDate)
+);
 
 export const futureDisplay = derived(
 	[time, hours],

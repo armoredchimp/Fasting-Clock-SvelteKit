@@ -1,19 +1,21 @@
 <script>
     import axios from "axios";
     import { afterUpdate } from "svelte";
+    import { Loading } from "carbon-components-svelte";
     import Circle from "$lib/Circle.svelte";
     import Clock from "$lib/Clock.svelte";
     import LengthInput from "$lib/LengthInput.svelte";
     import Start from "$lib/Start.svelte";
-    import Stats from "$lib/Stats.svelte";
     import Stop from "$lib/Stop.svelte";
+    import Stats from "$lib/Stats.svelte";
     import Login from "$lib/Login.svelte";
     import Register from "$lib/Register.svelte";
-    import { hours, currPerc, succeeded, startDate, futureDate, hasStarted, remHours, remMins, remSeconds } from '$lib/stores';
+    import { loading, hours, currPerc, succeeded, startDate, futureDate, hasStarted,  remHours, remMins, remSeconds } from '$lib/stores';
     import { aws_stages } from "../aws/stages";
     import { user, registrationStatus } from "$lib/auth/userStore";
 	import Logout from "$lib/Logout.svelte";
     
+
 
     let startedApp = false;
     
@@ -37,7 +39,7 @@
         calcRemTime()
     }
 
-    function handleStop(){
+   export function handleStop(){
         console.log('stop received')
         startedApp = false;
         $hasStarted = false;
@@ -45,6 +47,11 @@
         putFast()
         $currPerc = 50;
         $hours = 12;
+        $loading = true;
+        setTimeout(()=>{
+            $loading = false;
+            window.location.reload();
+        }, 1300)
     }
   
     function calcRemTime(){
@@ -142,9 +149,10 @@ h1, h2, p {
         text-overflow: ellipsis;  
         white-space: no-wrap;
         margin-top: 5rem;
+        font-weight: 500;
         letter-spacing: 0.4rem;
         /* position: absolute; */
-        transform: translateX(25.5rem);
+        transform: translateX(3.5rem);
 
     }
 
@@ -155,12 +163,48 @@ h1, h2, p {
         font-family: 'Plus Jakarta Sans Variable';
         display: flex;
         justify-content: space-evenly;
+        transform: translateY(3rem);
     }
 
+    .clock {
+        margin-bottom: 7rem;
+        /* margin-bottom: 2rem */
+    }
+
+    /* .length-input {
+        margin-bottom: 2rem;
+    } */
+
+    .info-section {
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+        background-color: #f8f9fa;
+        /* padding-left:7rem;
+        padding-top:7rem; */
+        min-width: 21rem;
+        padding: 4rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* .click-instructions {
+        margin-top: 5rem;
+        transform: translate(-20rem, 12rem);
+    } */
+
+    .start {
+        margin-top: 5rem;
+    }
+
+    .stop {
+        margin-top: 10rem;
+        transform: translateX(3rem);
+    }
     .stats-box {
         margin-top: 5rem;
     }
 </style>
+{#if !$loading}
 <div class="top-container" >
     <div class="auth-section">
     {#if $user !== null}
@@ -175,28 +219,49 @@ h1, h2, p {
     <div class="title-container">
         <h1 class="title">Fasting Clock</h1>
     </div>
-    <div style="width: 10rem"></div>
+    <div style="width: 10rem">
+        <h4>{$hasStarted}</h4>
+        <h4>{$succeeded}</h4>
+        <h4>{$futureDate}</h4>
+        <h4>{$startDate}</h4>
+        <h4>{$currPerc}</h4>
+    </div>
 </div>
 
 <div class="circle-stats">
+    <div></div>
     <div style:margin-left="1rem">
     <Circle />
     </div>
-    {#if startedApp === false && $succeeded === false}    
-    <div style:position="absolute" style:right="-12rem" style:top="18rem" >
-       
-        <LengthInput/>
+
+    
+    {#if $hasStarted === false && $succeeded === false}    
+    
+    <div style:min-width="5rem"></div>
+    
+    <div class="info-section" >
+        <div class="clock"><Clock /></div>
+        <div class="length-input"><LengthInput/></div>
+        
+        <div class="start"><Start on:started={handleStart}/></div>
     </div>
     {:else}
+    <div style:min-width="1rem"></div>
     <div class="stats-box" >
        
         <Stats/>
+
+       <div class="stop"><Stop on:stopped={handleStop} /></div> 
     </div>
     {/if}
+    <div>
+    </div>
 </div>
+{:else}
+<Loading />
+{/if}
 
-
-    <div style:margin-top="5rem" style:margin-left="26rem">
+    <!-- <div  >
         {#if $user !== null && $hasStarted === true}
         <Stop on:stopped={handleStop}/>
        
@@ -209,11 +274,11 @@ h1, h2, p {
         
         {/if}   
         </div>
-        
+         -->
     
    
   
-<div>        
+<!-- <div>        
     {#if $succeeded === true}
     <div style:margin-top="5rem" style:margin-left="3rem">
         <p>The fast has been completed, good job!</p>
@@ -221,4 +286,4 @@ h1, h2, p {
     </div>    
     {/if}
 
-</div>
+</div> -->

@@ -31,11 +31,11 @@
 </script>
 
 <style>
-    /* h1 {
-        color: rgb(255, 251, 0);
-    } */
+    h2 {
+        min-width: 10rem;
+    }
 </style>
 
 <h3>Current Time:</h3>
-<h1>{formatter.format(date)}</h1>
+<h2>{formatter.format(date)}&nbsp;&nbsp;</h2>
 <!-- <h1>{(mainHour === 0 ? 12 : mainHour) < 10 ? '\u00A0\u00A0' + (mainHour === 0 ? 12 : mainHour) : (mainHour === 0 ? 12 : mainHour)} : {min < 10 ? '0' + min : min} : {sec < 10 ? '0' + sec : sec} {amPM}</h1> -->

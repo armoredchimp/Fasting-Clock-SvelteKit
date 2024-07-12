@@ -1,6 +1,7 @@
 <script>
         import { hasStarted } from './stores';
         import { createEventDispatcher } from 'svelte';
+        import { Button } from 'carbon-components-svelte';
 
         const dispatch = createEventDispatcher();
 
@@ -14,6 +15,4 @@
 
 </script>
 
-<button on:click={terminate} style="width: 25rem; height: 4rem; font-size: 2rem; margin-top: 5rem; margin-left: 4rem;">
-Stop Fast
-</button>
+<Button kind="secondary" on:click={terminate}>Stop Fast</Button>

@@ -4,10 +4,10 @@ import amplifyConfig from '$lib/amplifyConfig';
 import { getCurrentUser, fetchAuthSession} from 'aws-amplify/auth';
 import { onMount } from 'svelte';
 import { userStore, user } from '$lib/auth/userStore';
-import { hours, currPerc, startDate, futureDate, hasStarted, succeeded } from '$lib/stores';
+import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading } from '$lib/stores';
 import axios from 'axios';
 import { aws_stages } from '../aws/stages';
-import { Tabs, Tab, TabContent } from "carbon-components-svelte";
+import Logout from '$lib/Logout.svelte';
 Amplify.configure(amplifyConfig);
 
 
@@ -18,22 +18,28 @@ onMount(async () =>{
 
 async function checkAuth(){
     try {
+        $loading = true;
         const {tokens} = await fetchAuthSession();
         if(tokens){
+           
             const currentUser = await getCurrentUser();
             userStore.setUser(currentUser)
             await checkActiveFast(currentUser.username)
+            $loading = false
         }else {
             userStore.reset()
+            $loading = false
         }
     } catch (err){
         console.error('Not authenticated', err)
         userStore.reset()
+        $loading = false
     }
 }
 
 async function checkActiveFast(username: string){
     try {
+        $loading = true;
         const url = aws_stages.API_GET_URL.replace("{username}", username)
         const response = await axios.get(url)
         const activeFast = response.data
@@ -46,7 +52,7 @@ async function checkActiveFast(username: string){
             futureDate.set(new Date(Number(activeFast.EndDate)));
             hasStarted.set(true);
             succeeded.set(false);
-
+            $loading = false;
             console.log("Stores after setting:", {
                 hours: $hours,
                 currPerc: $currPerc,
@@ -58,10 +64,12 @@ async function checkActiveFast(username: string){
         }else {
             hasStarted.set(false)
             succeeded.set(false)
+            $loading = false
         }
         
     }catch(err){
         console.error(err)
+        $loading = false
     }
 }
 
@@ -83,10 +91,11 @@ h1, h2, h3, h4, p {
 }
 
     .top-bar {
-        margin-top: 2rem;
-        margin-bottom: 3rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
         display: flex;
         justify-content: space-around;
+        background-color: rgb(73, 104, 104);
     }
 
     h4 {
@@ -95,27 +104,7 @@ h1, h2, h3, h4, p {
    
 </style>
 
-<!-- <div class="top-bar">
-<Tabs>
-    <Tab label="Clock" />
-    <Tab label="Calendar" />
-    <Tab label="Analytics" />
-    {#if $user !== null}
-    <Tab label = {$user.username}/>
-    {:else}
-    <Tab label = "Register"/>
-    {/if}
-      
-    <svelte:fragment slot="content">
-        <TabContent>Clock</TabContent>
-        <TabContent>Clock</TabContent>
-        <TabContent>Clock</TabContent>
-        {#if $user !== null}
-        <TabContent>{$user.username}</TabContent>
-        {/if}
-    </svelte:fragment>    
-</Tabs>
-</div> -->
+
 
 <div class="top-bar">
     <h4>Clock</h4>
@@ -129,7 +118,8 @@ h1, h2, h3, h4, p {
         {:else}
         Register
         {/if}
-    </h4>
+    </h4>        
+
 </div>
 
 <slot />

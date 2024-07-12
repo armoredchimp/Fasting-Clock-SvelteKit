@@ -49,7 +49,8 @@
     width: 40rem;
     border-radius: 50%;
     overflow: hidden;
-    background-color: darkcyan;
+    background-color: rgb(55, 119, 119);
+    box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1);
    }
 
    .overlay {
@@ -57,7 +58,7 @@
     bottom: 0.01px;
     height: 50%;
     width: 100%;
-    background-color: purple;
+    background-color: rgb(105, 20, 105);
    }
 
    .clock {
