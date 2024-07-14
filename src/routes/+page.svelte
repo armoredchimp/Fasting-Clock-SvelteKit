@@ -181,21 +181,21 @@ h1, h2, p {
     } */
 
     .info-section {
-        margin-top: 1rem;
+        margin-top: 6rem;
         margin-bottom: 2rem;
         background-color: #f8f9fa;
         /* padding-left:7rem;
         padding-top:7rem; */
+        height: 34rem;
         min-width: 21rem;
         padding: 4rem;
         border-radius: 1rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    /* .click-instructions {
-        margin-top: 5rem;
-        transform: translate(-20rem, 12rem);
-    } */
+    .circle-cont {
+        transform: translateY(2rem);
+    }
 
     .start {
         margin-top: 5rem;
@@ -207,6 +207,9 @@ h1, h2, p {
     }
     .stats-box {
         margin-top: 5rem;
+    }
+    .gottaLogin {
+        transform: translateY(5rem);
     }
 </style>
 {#if !$loading}
@@ -227,29 +230,32 @@ h1, h2, p {
 <div class="circle-stats">
     <div></div>
     <div style:margin-left="1rem">
-    <Circle />
+        {#if $hasStarted === false && $succeeded === false}    
+    
+    
+        <div class="info-section" >
+            <div class="clock"><Clock /></div>
+            <div class="length-input"><LengthInput/></div>
+        {#if $user !== null}    
+            <div class="start"><Start on:started={handleStart}/></div>
+        {:else}
+            <div class="gottaLogin"><p>Log in to begin a fast!</p></div>    
+        {/if}    
+        </div>
+        {:else}
+        <div style:min-width="1rem"></div>
+        <div class="stats-box" >
+           
+            <Stats/>
+    
+           <div class="stop"><Stop on:stopped={handleStop} /></div> 
+        </div>
+        {/if}
     </div>
 
-    
-    {#if $hasStarted === false && $succeeded === false}    
-    
     <div style:min-width="5rem"></div>
+    <div class="circle-cont"><Circle /></div>
     
-    <div class="info-section" >
-        <div class="clock"><Clock /></div>
-        <div class="length-input"><LengthInput/></div>
-        
-        <div class="start"><Start on:started={handleStart}/></div>
-    </div>
-    {:else}
-    <div style:min-width="1rem"></div>
-    <div class="stats-box" >
-       
-        <Stats/>
-
-       <div class="stop"><Stop on:stopped={handleStop} /></div> 
-    </div>
-    {/if}
     <div>
     </div>
 </div>

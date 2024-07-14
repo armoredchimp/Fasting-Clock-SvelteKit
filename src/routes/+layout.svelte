@@ -4,13 +4,15 @@ import amplifyConfig from '$lib/amplifyConfig';
 import { getCurrentUser, fetchAuthSession} from 'aws-amplify/auth';
 import { onMount } from 'svelte';
 import { userStore, user } from '$lib/auth/userStore';
-import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading } from '$lib/stores';
+import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage } from '$lib/stores';
 import axios from 'axios';
 import { aws_stages } from '../aws/stages';
 import {slide} from 'svelte/transition'
 import Login from '$lib/Login.svelte';
 import Logout from '$lib/Logout.svelte';
 import Register from '$lib/Register.svelte';
+import '../app.css'
+
 Amplify.configure(amplifyConfig);
 
 let activeSubmenu = null;
@@ -20,6 +22,10 @@ let showLogin = false;
 onMount(async () =>{
     await checkAuth()
 })
+
+function setCurrentPage(path){
+    currPage.set(path)
+}
 
 async function checkAuth(){
     try {
@@ -139,6 +145,7 @@ h1, h2, h3, h4, p {
         width: 20rem;
         height: 20rem;
         background-color: rgb(73, 104, 104);
+        border-bottom-right-radius: 1rem;
         z-index: 1000;
         padding: 2rem;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1), 1px 0 2px rgba(0,0,0,0.05);
@@ -146,6 +153,9 @@ h1, h2, h3, h4, p {
         margin-top: -1px;
     }
 
+    .login {
+        height: 17rem;
+    }
     .nav-item {
         cursor: pointer;
         transition: color 0.3s ease
@@ -158,20 +168,6 @@ h1, h2, h3, h4, p {
 
     .nav-item:active {
         color: #aaaaaa;
-    }
-
-    .register-cont {
-        position: fixed;
-        top: 5rem;
-        left: 0;
-        width: 20rem;
-        height: 20rem;
-        background-color: rgb(73, 104, 104);
-        z-index: 1000;
-        padding: 2rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1), 1px 0 2px rgba(0,0,0,0.05);
-        border-top: none;
-        margin-top: -1px;
     }
 
     a {
@@ -202,11 +198,11 @@ h1, h2, h3, h4, p {
 
 
 <div class="top-bar">
-    <h4 class="nav-item">Clock</h4>
-    <h4 class="nav-item">Calendar</h4>
-    <h4 class="nav-item">Analytics</h4>
+    <h4 class="nav-item" class:active={$currPage === '/'}><a href='/'>Clock</a></h4>
+    <h4 class="nav-item" class:active={$currPage === '/calendar'} on:click={()=> setCurrentPage('/calendar')}><a href='/calendar'>Calendar</a></h4>
+    <h4 class="nav-item" class:active={$currPage === '/analytics'}><a href='/analytics'>Analytics</a></h4>
     <h4 class="nav-item" on:click={()=>toggleSubmenu('theme')}>Theme</h4>
-    <h4 class="nav-item">About</h4>
+    <h4 class="nav-item" class:active={$currPage === '/about'}><a href='/about'>About</a></h4>
     <h4 class="nav-item" on:click={()=>toggleSubmenu('user')}>
         {#if $user !== null}
         {$user.username}
@@ -237,7 +233,7 @@ h1, h2, h3, h4, p {
 {/if}
 
 {#if showLogin}
-     <div class="auth-cont" transition:slide={{ duration: 300, axis: 'x'}}>
+     <div class="auth-cont login" transition:slide={{ duration: 300, axis: 'x'}}>
         <Login />
      </div>
 {/if}
