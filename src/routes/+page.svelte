@@ -3,6 +3,7 @@
     import { afterUpdate } from "svelte";
     import { Loading } from "carbon-components-svelte";
     import Circle from "$lib/Circle.svelte";
+    import Card from "$lib/Card.Svelte";
     import Clock from "$lib/Clock.svelte";
     import LengthInput from "$lib/LengthInput.svelte";
     import Start from "$lib/Start.svelte";
