@@ -7,10 +7,15 @@ import { userStore, user } from '$lib/auth/userStore';
 import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading } from '$lib/stores';
 import axios from 'axios';
 import { aws_stages } from '../aws/stages';
+import {slide} from 'svelte/transition'
+import Login from '$lib/Login.svelte';
 import Logout from '$lib/Logout.svelte';
+import Register from '$lib/Register.svelte';
 Amplify.configure(amplifyConfig);
 
-
+let activeSubmenu = null;
+let showReg = false;
+let showLogin = false;
 
 onMount(async () =>{
     await checkAuth()
@@ -73,6 +78,20 @@ async function checkActiveFast(username: string){
     }
 }
 
+function toggleAuth(type){
+    if (type === 'register') {
+        showReg = !showReg;
+        showLogin = false;
+    } else if (type === 'login') {
+        showLogin = !showLogin;
+        showReg = false;
+    }
+}
+
+function toggleSubmenu(menu){
+    activeSubmenu = activeSubmenu === menu ? null : menu
+}
+
 
 </script>
 <style>
@@ -96,30 +115,154 @@ h1, h2, h3, h4, p {
         display: flex;
         justify-content: space-around;
         background-color: rgb(73, 104, 104);
+        position: relative;
+        z-index: 1001;
+    }
+
+    .submenu {
+        position: absolute;
+        left: 0;
+        right: 0;
+        background-color: rgb(73, 104, 104);
+        padding: 0.5rem 0;
+        padding-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-evenly;
+        transform: translateY(-0.8rem);
+        z-index: 1002;
+    }
+
+    .auth-cont {
+        position: fixed;
+        top: 5rem;
+        left: 0;
+        width: 20rem;
+        height: 20rem;
+        background-color: rgb(73, 104, 104);
+        z-index: 1000;
+        padding: 2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1), 1px 0 2px rgba(0,0,0,0.05);
+        border-top: none;
+        margin-top: -1px;
+    }
+
+    .nav-item {
+        cursor: pointer;
+        transition: color 0.3s ease
+    }
+
+    .nav-item:hover {
+        color: #c5c2c2;
+        
+    }
+
+    .nav-item:active {
+        color: #aaaaaa;
+    }
+
+    .register-cont {
+        position: fixed;
+        top: 5rem;
+        left: 0;
+        width: 20rem;
+        height: 20rem;
+        background-color: rgb(73, 104, 104);
+        z-index: 1000;
+        padding: 2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1), 1px 0 2px rgba(0,0,0,0.05);
+        border-top: none;
+        margin-top: -1px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #e4dede
     }
 
     h4 {
         font-size: 0.9rem;
     }
    
+    .registerBtn, .loginBtn {
+        background: none;
+        color: white;
+        padding: 0;
+        border: none;
+        cursor: pointer;
+        color: #e4dede;
+        font: inherit;
+        transition: color 0.3s ease;
+    }
+
+    .registerBtn:hover, .loginBtn:hover {
+        color: #c5c2c2;
+    }
 </style>
 
 
 
 <div class="top-bar">
-    <h4>Clock</h4>
-    <h4>Calendar</h4>
-    <h4>Analytics</h4>
-    <h4>Theme</h4>
-    <h4>About</h4>
-    <h4>
+    <h4 class="nav-item">Clock</h4>
+    <h4 class="nav-item">Calendar</h4>
+    <h4 class="nav-item">Analytics</h4>
+    <h4 class="nav-item" on:click={()=>toggleSubmenu('theme')}>Theme</h4>
+    <h4 class="nav-item">About</h4>
+    <h4 class="nav-item" on:click={()=>toggleSubmenu('user')}>
         {#if $user !== null}
         {$user.username}
         {:else}
-        Register
+        Sign In
         {/if}
     </h4>        
 
 </div>
 
+{#if activeSubmenu === 'theme'}
+    <div class="submenu" transition:slide={{ duration: 300, axis: 'y'}}>
+            <a href="/theme1">Theme 1</a>   
+     </div>
+{/if}
+
+{#if activeSubmenu === 'user'}
+    <div class="submenu" transition:slide={{ duration: 300, axis: 'y'}}>
+        {#if $user !== null}
+            <a href="/profile">Profile</a>
+            <a href="/settings">Settings</a>
+            <Logout />
+        {:else}
+        <button class="registerBtn" on:click={() => toggleAuth('register')}>Register</button>    
+        <button class="loginBtn" on:click={() => toggleAuth('login')}>Login</button>  
+        {/if}    
+     </div>
+{/if}
+
+{#if showLogin}
+     <div class="auth-cont" transition:slide={{ duration: 300, axis: 'x'}}>
+        <Login />
+     </div>
+{/if}
+
+{#if showReg}
+     <div class="auth-cont" transition:slide={{ duration: 300, axis: 'x'}}>
+        <Register />
+     </div>
+{/if}
+
 <slot />
+
+
+<!-- {#if activeSubmenu === 'theme'}
+    <div class="submenu" transition:slide={{ duration: 300, axis: 'y'}}>
+            <a href="/theme1">Theme 1</a>   
+     </div>
+{/if}
+
+{#if activeSubmenu === 'user'}
+    <div class="submenu" transition:slide={{ duration: 300, axis: 'y'}}>
+        {#if $user !== null}
+            <a href="/profile">Profile</a>
+            <a href="/settings">Settings</a>
+            <Logout />
+        {/if}    
+     </div>
+{/if} -->

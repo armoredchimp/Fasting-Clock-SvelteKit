@@ -6,6 +6,7 @@ export const startDate = writable(new Date());
 export const futureDate = writable(new Date());
 export const hasStarted = writable(false);
 export const succeeded = writable(false);
+export const exceeded = writable(false);
 export const loading = writable(false);
 
 export const time = readable(new Date(), function start(set) {

@@ -9,8 +9,7 @@
     import Stop from "$lib/Stop.svelte";
     import Stats from "$lib/Stats.svelte";
     import Login from "$lib/Login.svelte";
-    import Register from "$lib/Register.svelte";
-    import { loading, hours, currPerc, succeeded, startDate, futureDate, hasStarted,  remHours, remMins, remSeconds } from '$lib/stores';
+    import { loading, hours, currPerc, succeeded, exceeded, startDate, futureDate, hasStarted,  remHours, remMins, remSeconds } from '$lib/stores';
     import { aws_stages } from "../aws/stages";
     import { user, registrationStatus } from "$lib/auth/userStore";
 	import Logout from "$lib/Logout.svelte";
@@ -66,7 +65,9 @@
         console.log('success')
         startedApp = false;
         $hasStarted = false;
-        $currPerc = 0;
+        if($currPerc <= 0){
+            $exceeded = true
+        }
         $succeeded = true;
         putFast()
     }
@@ -81,6 +82,9 @@
     )
 
     async function putFast(){
+        if ($exceeded){
+            $futureDate = new Date()
+        }
         let data = {
             "pathParameters": {
                 "UserID": $user?.username,
@@ -132,9 +136,10 @@ h1, h2, p {
         margin-bottom: 3rem;
     }
 
-    .auth-section {
-        width: 10rem;
-    }
+    /* .auth-section {
+        width: 12rem;
+        transform: translate(-1rem, -1rem);
+    } */
 
     .title-container {
         /* position: relative; */
@@ -206,16 +211,7 @@ h1, h2, p {
 </style>
 {#if !$loading}
 <div class="top-container" >
-    <div class="auth-section">
-    {#if $user !== null}
-    <!-- <h2>Logged in as {$user.username}</h2>
-    <Logout />  -->
-    <!-- <h3>{$hasStarted}</h3>
-    <h3>{$currPerc}</h3> -->
-    {:else}
-    <Register />       
-    {/if}
-    </div>
+    
     <div class="title-container">
         <h1 class="title">Fasting Clock</h1>
     </div>

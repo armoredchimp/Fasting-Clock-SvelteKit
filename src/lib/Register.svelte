@@ -89,7 +89,11 @@
 <style>
     .reg-cont {
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        align-items: stretch;
+        background-color: rgb(73, 104, 104);
+        border-bottom-right-radius: 0.2rem;
+        padding: 2rem 2rem 3rem 1rem;
     }
     .form-group {
         flex: 1;
@@ -106,17 +110,22 @@
         font-size: 0.7em;
     }
     button {
-        background-color: #4caf50;
+        background: none;
         color: white;
-        padding: 5px 10px;
+        padding: 7px 12px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        margin-top: 2rem;
         font-size: 14px;
-        transition: background-color 0.3s;
+        width: auto;
+        min-width: 100px;
+        transition: background-color 0.3s color 0.3s;
+        margin-right: 2rem;
+        align-self: flex-end;
     }
     button:hover {
-        background-color: #45a049;
+        background-color: rgb(105, 20, 105);
     }
 </style>
 
