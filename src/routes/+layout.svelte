@@ -7,7 +7,7 @@ import { userStore, user } from '$lib/auth/userStore';
 import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage } from '$lib/stores';
 import axios from 'axios';
 import { aws_stages } from '../aws/stages';
-import {slide} from 'svelte/transition'
+import { slide } from 'svelte/transition'
 import Login from '$lib/Login.svelte';
 import Logout from '$lib/Logout.svelte';
 import Register from '$lib/Register.svelte';
@@ -29,8 +29,8 @@ function setCurrentPage(path){
 
 async function checkAuth(){
     try {
-        $loading = true;
         const {tokens} = await fetchAuthSession();
+        $loading = true;
         if(tokens){
            
             const currentUser = await getCurrentUser();
@@ -195,6 +195,9 @@ h1, h2, h3, h4, p {
     }
 </style>
 
+<svelte:head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@3.2.1/event-calendar.min.css">
+</svelte:head>
 
 
 <div class="top-bar">
