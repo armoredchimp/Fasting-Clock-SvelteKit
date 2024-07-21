@@ -63,18 +63,22 @@
 
 .ec-day {
 	transition: background-color 0.3s ease;
+	/* height: 12rem; */
 }
 
 .ec-day:hover {
 	background-color: var(--ec-highlight-color);
 }
 
+.ec-event-body {
+}
+
 .ec-event {
 	border-radius: 4px;
-	padding: 4px 8px;
+	padding: 2px 6px;
 	font-size: 0.85em;
 	transition: all 0.3s ease;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 2px 4px rgba(31, 27, 27, 0.1);
 }
 
 .ec-event:hover {

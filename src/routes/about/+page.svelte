@@ -15,6 +15,12 @@
 </script>
 
 <style>
+    .main-cont {
+        display: flex;
+        flex-direction: column;
+        gap: 6rem;
+    }
+
     .section-cont {
         margin-bottom: 5rem;
     }
@@ -48,28 +54,29 @@
 
 
 
+<div class="main-cont">
+    <div class="section-cont primary">
+        
+        <h2 style:margin-top="3rem">AWS Microservices</h2>
+        <div class="card-grid">
+        {#each awsCards as card (card.id)}
+            <div class="card-wrapper">
+            <Card title={card.title} svgPath={card.svgPath} desc={card.desc} />
+            </div>    
+            {/each}    
+        </div>
 
-<div class="section-cont primary">
-    
-    <h2 style:margin-top="3rem">AWS Microservices</h2>
-<div class="card-grid">
-    {#each awsCards as card (card.id)}
-        <div class="card-wrapper">
-        <Card title={card.title} svgPath={card.svgPath} desc={card.desc} />
-        </div>    
-        {/each}    
-</div>
+    </div>
 
-</div>
+    <div class="section-cont secondary">
+    <h2 style:margin-top="6rem">Languages and Frameworks</h2>
 
-<div class="section-cont secondary">
-<h2 style:margin-top="3rem">Languages and Frameworks</h2>
-
-<div class="card-grid">
-    {#each langCards as card (card.id)}
-        <div class="card-wrapper">
-        <Card title={card.title} svgPath={card.svgPath} desc={card.desc} />
-        </div>    
-        {/each}    
-</div>
-</div>
+        <div class="card-grid">
+        {#each langCards as card (card.id)}
+            <div class="card-wrapper">
+            <Card title={card.title} svgPath={card.svgPath} desc={card.desc} />
+            </div>    
+            {/each}    
+        </div>
+    </div>
+</div>    

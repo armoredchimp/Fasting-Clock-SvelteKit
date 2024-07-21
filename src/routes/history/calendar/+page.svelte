@@ -5,7 +5,7 @@
     import Calendar from "$lib/Calendar.svelte";
 
     onMount(()=>{
-        currPage.set('/calendar')
+        currPage.set('/history/calendar')
     })
 
 

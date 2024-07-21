@@ -3,7 +3,7 @@
     import { afterUpdate, onMount } from "svelte";
     import { user } from "./auth/userStore";
     import { Loading } from "carbon-components-svelte";
-    import { loading } from "./stores";
+    import { loading, fasts, dataFetched } from "./stores";
     import Calendar from '@event-calendar/core';
     import DayGrid from '@event-calendar/day-grid'
     import '@event-calendar/core/index.css';
@@ -20,21 +20,28 @@
         datesSet: handleDatesSet,
         height: 'auto',
     }
-    let fasts = [];
+    
     let showDuration = true;
+    
    
     onMount(async () => {
-        if ($user?.username) {
+        if ($user?.username && !$dataFetched) {
             await fetchFasts();
+        } else {
+            updateCalendarEvents()
         }
     });
    
-    $: if ($user !== null){
+    $: if ($user !== null && !$dataFetched){
         fetchFasts()
     }
 
 
     async function fetchFasts() {
+        if ($dataFetched || $fasts.length > 0){
+            updateCalendarEvents()
+        }
+
         try {
             $loading = true;
             const username = $user?.username
@@ -42,7 +49,8 @@
             console.log('Fetching fasts for username:', username);
             const url = aws_stages.API_GET_ALL_URL.replace("{username}", username);
             const response = await axios.get(url);
-            fasts = response.data;
+            $fasts = response.data;
+            $dataFetched = true;
             console.log('Fetched fasts:', fasts);
             $loading = false;
             updateCalendarEvents();
@@ -57,14 +65,14 @@
 
 
     function updateCalendarEvents() {
-        console.log('Updating calendar events. Fasts:', fasts);
-        const events = fasts.map(fast => ({
+        console.log('Updating calendar events. Fasts:', $fasts);
+        const events = $fasts.map(fast => ({
             start: new Date(Number(fast.StartDate)),
             end: new Date(Number(fast.EndDate)),
-            title: showDuration ? `${fast.TotalDuration}h` : (fast.Success ? 'Success' : 'Incomplete'),
+            title: showDuration ? `${fast.TotalDuration}h` : ``,
             extendedProps: {
                 duration: Number(fast.TotalDuration),
-                success: fast.Success
+                success: fast.Succeeded
             }
         }));
         
@@ -81,7 +89,7 @@
         const color = getColorForDuration(duration);
         return {
             html: `<div class="fast-event" style="background-color: ${color}; color: white;  padding: 1.2rem 5rem; font-weight: bold; font-size: 0.8em; white-space: nowrap;">
-                     ${info.event.title} 
+                     ${info.event.title} : ${success ? 'Succeeded' : 'Incomplete'}
                    </div>`
         };
     }
