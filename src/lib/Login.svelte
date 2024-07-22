@@ -48,7 +48,7 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        background-color: rgb(73, 104, 104);
+        background-color: var(--primary-color);
         padding: 2rem 2rem 3rem 1rem;
     }
 
@@ -82,7 +82,7 @@
         align-self: flex-end;
     }
     button:hover {
-        background-color: rgb(105, 20, 105);
+        background-color: var(--secondary-color);
     }
 </style>
 

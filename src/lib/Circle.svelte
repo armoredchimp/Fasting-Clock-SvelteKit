@@ -5,6 +5,7 @@
     import Clock from './Clock.svelte';
     import TargetClock from './TargetClock.svelte';
 	import { afterUpdate } from 'svelte';
+
 	
 
     
@@ -45,11 +46,11 @@
    .circle {
     position: relative;
     top: 0;
-    height: 40rem;
-    width: 40rem;
+    height: 55rem;
+    width: 55rem;
     border-radius: 50%;
     overflow: hidden;
-    background-color: rgb(55, 119, 119);
+    background-color: var(--alternate-primary);
     box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1);
    }
 
@@ -58,7 +59,7 @@
     bottom: 0.01px;
     height: 50%;
     width: 100%;
-    background-color: rgb(105, 20, 105);
+    background-color: var(--secondary-color);
    }
 
    .clock {
@@ -70,15 +71,15 @@
 }
    .target-clock {
     position: absolute;
-    top: 16.5rem;
-    left: 12.5rem;
+    top: 24.5rem;
+    left: 20rem;
     z-index: 1;
    }
 
    .perc {
     position: absolute;
-    top: 18.5rem;
-    left: 13rem;
+    top: 25.5rem;
+    left: 20.5rem;
     z-index: 1;
    }
  

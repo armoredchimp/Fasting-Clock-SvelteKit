@@ -91,7 +91,7 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        background-color: rgb(73, 104, 104);
+        background-color: var(--primary-color);
         border-bottom-right-radius: 0.2rem;
         padding: 2rem 2rem 3rem 1rem;
     }
@@ -102,7 +102,7 @@
     input {
         width: 100%;
         padding: 5px;
-        border: 1px solid #a5d6a7;
+        border: 1px solid var(--lighter-color);
         border-radius: 4px;
     }
     .error {
@@ -125,7 +125,7 @@
         align-self: flex-end;
     }
     button:hover {
-        background-color: rgb(105, 20, 105);
+        background-color: var(--secondary-color);
     }
 </style>
 

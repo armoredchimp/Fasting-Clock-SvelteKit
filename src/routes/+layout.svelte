@@ -28,7 +28,12 @@
         await checkAuth()
     })
     
-    
+    function setTheme(theme){
+        document.body.classList.remove('nature','ocean','warmth');
+        if(theme !== 'default'){
+            document.body.classList.add(theme)
+        }
+    }
     
     async function checkAuth(){
         try {
@@ -128,7 +133,7 @@
             padding-bottom: 2rem;
             display: flex;
             justify-content: space-around;
-            background-color: rgb(73, 104, 104);
+            background-color: var(--primary-color);
             position: relative;
             z-index: 1001;
         }
@@ -137,7 +142,7 @@
             position: absolute;
             left: 0;
             right: 0;
-            background-color: rgb(73, 104, 104);
+            background-color: var(--primary-color);
             padding: 0.5rem 0;
             padding-bottom: 1.5rem;
             display: flex;
@@ -152,7 +157,7 @@
             left: 0;
             width: 20rem;
             height: 20rem;
-            background-color: rgb(73, 104, 104);
+            background-color: var(--primary-color);
             border-bottom-right-radius: 1rem;
             z-index: 1000;
             padding: 2rem;
@@ -189,7 +194,6 @@
        
         .registerBtn, .loginBtn {
             background: none;
-            color: white;
             padding: 0;
             border: none;
             cursor: pointer;
@@ -212,11 +216,11 @@
 
     <div class="top-bar">
         <h4 class="nav-item" class:active={$currPage === '/'}><a href='/'>Clock</a></h4>
-        <h4 class="nav-item" on:click={()=>toggleSubmenu('history')}>History</h4>
+        <h4 class="nav-item" on:mouseenter={()=>toggleSubmenu('history')}>History</h4>
         <h4 class="nav-item" class:active={$currPage === '/analytics'}><a href='/analytics'>Analytics</a></h4>
-        <h4 class="nav-item" on:click={()=>toggleSubmenu('theme')}>Theme</h4>
+        <h4 class="nav-item" on:mouseenter={()=>toggleSubmenu('theme')}>Theme</h4>
         <h4 class="nav-item" class:active={$currPage === '/about'}><a href='/about'>About</a></h4>
-        <h4 class="nav-item" on:click={()=>toggleSubmenu('user')}>
+        <h4 class="nav-item" on:mouseenter={()=>toggleSubmenu('user')}>
             {#if $user !== null}
             {$user.username}
             {:else}
@@ -228,7 +232,10 @@
     
     {#if activeSubmenu === 'theme'}
         <div class="submenu" transition:slide={{ duration: 300, axis: 'y'}}>
-                <a href="/theme1">Theme 1</a>   
+            <div class="nav-item" on:click={() => setTheme('default')}>Default</div>
+            <div class="nav-item" on:click={() => setTheme('nature')}>Nature</div>
+            <div class="nav-item" on:click={() => setTheme('ocean')}>Ocean</div>
+            <div class="nav-item" on:click={() => setTheme('warmth')}>Warmth</div>   
          </div>
     {/if}
     

@@ -184,7 +184,7 @@ h1, h2, p {
     .info-section {
         margin-top: 6rem;
         margin-bottom: 2rem;
-        background-color: #f8f9fa;
+        background-color: var(--modal-color);
         /* padding-left:7rem;
         padding-top:7rem; */
         height: 34rem;
@@ -195,7 +195,7 @@ h1, h2, p {
     }
 
     .circle-cont {
-        transform: translateY(2rem);
+        transform: translateY(-6rem);
     }
 
     .start {
@@ -217,15 +217,15 @@ h1, h2, p {
 <div class="top-container" >
     
     <div class="title-container">
-        <h1 class="title">Fasting Clock</h1>
+        <!-- <h1 class="title">Fasting Clock</h1> -->
     </div>
-    <div style="width: 10rem">
+    <!-- <div style="width: 10rem">
         <h4>{$hasStarted}</h4>
         <h4>{$succeeded}</h4>
         <h4>{$futureDate}</h4>
         <h4>{$startDate}</h4>
         <h4>{$currPerc}</h4>
-    </div>
+    </div> -->
 </div>
 
 <div class="circle-stats">

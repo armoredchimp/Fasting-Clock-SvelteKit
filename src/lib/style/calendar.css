@@ -2,7 +2,7 @@
 
 .ec {
 	--ec-border-color: #e0e0e0;
-	--ec-today-bg-color: rgba(66, 165, 245, 0.1);
+	--ec-today-bg-color: var(--alternate-primary);
 	--ec-border-color: #e0e0e0;
 	--ec-event-bg-color: #3498db;
 	--ec-event-text-color: #ffffff;
@@ -12,7 +12,7 @@
 	--ec-button-active-bg-color: #e0e0e0;
 	--ec-button-active-border-color: #cccccc;
 	--ec-button-active-text-color: #000000;
-	--ec-highlight-color: rgba(66, 165, 245, 0.2);
+	--ec-highlight-color: var(--secondary-color);
 	--ec-text-color: #333333;
 	--ec-bg-color: #ffffff;
 	--ec-popup-bg-color: #ffffff;
@@ -71,6 +71,7 @@
 }
 
 .ec-event-body {
+	background-color: var(--primary-color);
 }
 
 .ec-event {
@@ -79,6 +80,7 @@
 	font-size: 0.85em;
 	transition: all 0.3s ease;
 	box-shadow: 0 2px 4px rgba(31, 27, 27, 0.1);
+	background-color: var(--alternate-primary);
 }
 
 .ec-event:hover {

@@ -95,9 +95,9 @@
     }
 
     function getColorForDuration(duration) {
-        if (duration < 12) return '#87CEFA';
-        if (duration < 24) return '#98FB98';
-        if (duration < 48) return '#FFA07A';
+        if (duration < 12) return 'var(--lighter-color)';
+        if (duration < 24) return 'var(--secondary-color)';
+        if (duration < 48) return 'var(--rare-color)';
         return '#DDA0DD';
     }
 
@@ -120,11 +120,18 @@
 
   </style>
 
-{#if $loading}
-    <Loading />
-{:else}
 
-<div class="calendar-cont">
-    <Calendar bind:this={ec} {plugins} {options} />
-</div>
+{#if $user !== null}
+    {#if $loading}
+        <Loading />
+    {:else}
+
+    <div class="calendar-cont">
+        <Calendar bind:this={ec} {plugins} {options} />
+    </div>
+    {/if}
+{:else}
+    <div>
+        <h2>Log in to see the calendar</h2>
+    </div>    
 {/if}

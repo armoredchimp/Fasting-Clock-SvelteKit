@@ -1,5 +1,5 @@
 <script>
-import { dataFetched, fasts, loading } from "./stores";
+import { dataFetched, fasts, loading, currPerc } from "./stores";
 import { user } from "./auth/userStore";
 import axios from "axios";
 import { aws_stages } from "../aws/stages";
@@ -12,9 +12,11 @@ onMount(async () => {
         }
     });
    
-    $: if ($user !== null && !$dataFetched){
-        fetchFasts()
-    }
+$: if ($user !== null && !$dataFetched){
+    fetchFasts()
+}
+
+
 
 async function fetchFasts() {
         if ($dataFetched || $fasts.length > 0){
@@ -60,10 +62,11 @@ function getProgressBarWidth(percentCompleted) {
 }
 
 function getProgressBarColor(percentCompleted) {
-    if (percentCompleted < 33) return '#FFA07A'; // Light Salmon
-    if (percentCompleted < 66) return '#98FB98'; // Pale Green
-    return '#87CEFA'; // Light Sky Blue
+    if (percentCompleted < 33) return 'var(--lighter-color)'; 
+    if (percentCompleted < 66) return 'var(--secondary-color)'; 
+    return 'var(--rare-color)'; 
 }
+
 
 function formatDate(timestamp) {
         return new Date(Number(timestamp)).toLocaleString();
@@ -77,6 +80,23 @@ function formatDuration(milliseconds) {
 function getStatusColor(success) {
         return success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
     }
+
+function progressOrStopped(fast){
+    if(!fast.InProgress){
+        return formatDate(calculateStopTime(fast))
+    } else {
+        return 'In Progress'
+    }
+}
+
+function showPercent(fast){
+    if(!fast.InProgress){
+        return `${(100 - fast.PercentRemaining).toFixed(1)}%`
+    } else {
+        return (100 - $currPerc).toFixed(2)
+    }
+}
+
 </script>
 
 <style>
@@ -90,7 +110,7 @@ function getStatusColor(success) {
         font-size: 2rem;
         font-weight: bold;
         margin-bottom: 20px;
-        color: #333;
+        /* color: #333; */
     }
 
     .fast-list {
@@ -100,7 +120,7 @@ function getStatusColor(success) {
     }
 
     .fast-card {
-        background-color: #ffffff;
+        background-color: var(--modal-color);
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         overflow: hidden;
@@ -170,7 +190,7 @@ function getStatusColor(success) {
     .fast-details p {
         margin: 5px 0;
         font-size: 0.9rem;
-        color: #555;
+        color: #333;
     }
 
     .fast-details strong {
@@ -178,6 +198,8 @@ function getStatusColor(success) {
     }
 </style>
 
+
+{#if $user !== null}
 <div class="container">
     <h2 class="title">Fast Records</h2>
     {#if $loading}
@@ -201,9 +223,9 @@ function getStatusColor(success) {
                         <div class="fast-details">
                             <p><strong>Start:</strong> {formatDate(fast.StartDate)}</p>
                             <p><strong>End:</strong> {formatDate(fast.EndDate)}</p>
-                            <p><strong>Stopped:</strong> {formatDate(calculateStopTime(fast))}</p>
+                            <p><strong>Stopped:</strong> {progressOrStopped(fast)}</p>
                             <p><strong>Actual Duration:</strong> {formatDuration(calculateStopTime(fast) - Number(fast.StartDate))}</p>
-                            <p><strong>Progress:</strong> {(100 - fast.PercentRemaining).toFixed(1)}%</p>
+                            <p><strong>Progress:</strong> {showPercent(fast)}</p>
                         </div>
                     </div>
                 </div>
@@ -211,6 +233,5 @@ function getStatusColor(success) {
         </div>
     {/if}
 </div>
-
-
+{/if}
 
