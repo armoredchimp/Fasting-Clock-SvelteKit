@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-    import { afterUpdate } from "svelte";
+    import { afterUpdate, onMount } from "svelte";
     import { Loading } from "carbon-components-svelte";
     import Circle from "$lib/Circle.svelte";
     import Card from "$lib/Card.Svelte";
@@ -10,7 +10,7 @@
     import Stop from "$lib/Stop.svelte";
     import Stats from "$lib/Stats.svelte";
     import Login from "$lib/Login.svelte";
-    import { loading, hours, currPerc, succeeded, exceeded, startDate, futureDate, hasStarted,  remHours, remMins, remSeconds } from '$lib/stores';
+    import { loading, hours, currPerc, succeeded, exceeded, startDate, futureDate, hasStarted,  remHours, remMins, remSeconds, currPage } from '$lib/stores';
     import { aws_stages } from "../aws/stages";
     import { user, registrationStatus } from "$lib/auth/userStore";
 	import Logout from "$lib/Logout.svelte";
@@ -20,7 +20,9 @@
     let startedApp = false;
     
     
-    
+   onMount(()=>{
+    currPage.set('/')
+   }) 
   
     
     

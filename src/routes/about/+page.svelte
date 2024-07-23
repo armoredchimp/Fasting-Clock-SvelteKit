@@ -40,7 +40,13 @@
 
     .card-wrapper {
         display: grid;
+        background-color: var(--modal-color);
     }
+
+    .card {
+        background-color: var(--modal-color);
+    }
+
     h1 {
         text-align: center;
         margin-bottom: 2rem;

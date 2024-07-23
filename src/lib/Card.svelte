@@ -10,7 +10,7 @@
 
 <style>
     .card {
-        background-color: #f0f0f0;
+        background-color: var(--modal-color);
         border-radius: 0.8rem;
         padding: 2rem;
         text-align: center;

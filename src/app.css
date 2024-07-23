@@ -23,11 +23,11 @@ a {
 /* Color Themes */
 :root {
 	--primary-color: rgb(73, 104, 104);
-	--secondary-color: rgb(105, 20, 105);
+	--secondary-color: rgb(11, 92, 92);
 	--alternate-primary: rgb(55, 119, 119);
-	--modal-color: rgb(45, 45, 45);
-	--lighter-color: rgb(120, 150, 150);
-	--rare-color: rgb(180, 90, 180);
+	--modal-color: rgb(25, 52, 52);
+	--lighter-color: rgb(135, 206, 206);
+	--rare-color: rgb(155, 211, 197);
 }
 
 .nature {
@@ -36,7 +36,7 @@ a {
 	--alternate-primary: rgb(45, 80, 45);
 	--modal-color: rgb(40, 50, 40);
 	--lighter-color: rgb(100, 140, 100);
-	--rare-color: rgb(200, 130, 50);
+	--rare-color: rgb(255, 200, 100);
 }
 
 .ocean {
@@ -54,5 +54,5 @@ a {
 	--alternate-primary: rgb(130, 55, 35);
 	--modal-color: rgb(50, 40, 35);
 	--lighter-color: rgb(200, 120, 100);
-	--rare-color: rgb(240, 200, 70);
+	--rare-color: rgb(255, 230, 150);
 }

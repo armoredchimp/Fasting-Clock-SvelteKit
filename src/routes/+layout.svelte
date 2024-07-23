@@ -19,7 +19,9 @@
     let activeSubmenu = null;
     let showReg = false;
     let showLogin = false;
-    
+    let submenuTimer: number | null = null
+
+
     $: if ($navigating){
         closeSubmenu()
     }
@@ -103,13 +105,33 @@
     }
     
     function toggleSubmenu(menu){
-        activeSubmenu = activeSubmenu === menu ? null : menu
+        if (activeSubmenu === menu){
+            closeSubmenu();
+        } else {
+            if (submenuTimer){
+                clearTimeout(submenuTimer)
+            }
+            activeSubmenu = menu;
+            submenuTimer = setTimeout(()=>{
+                closeSubmenu()
+            }, 4000)
+        }
     }
     
+    function clearSubmenuTimer(){
+        if (submenuTimer){
+            clearTimeout(submenuTimer)
+            submenuTimer = null;
+        }
+    }
+
     function closeSubmenu(){
-        activeSubmenu = null;
-        showReg = false;
-        showLogin = false;
+        if(!showReg && !showLogin){
+            activeSubmenu = null;
+            showReg = false;
+            showLogin = false;
+
+        }
     }
     
     </script>
@@ -128,15 +150,15 @@
         font-family: 'Plus Jakarta Sans Variable';
     }
     
-        .top-bar {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-            display: flex;
-            justify-content: space-around;
-            background-color: var(--primary-color);
-            position: relative;
-            z-index: 1001;
-        }
+    .top-bar {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        display: flex;
+        justify-content: space-around;
+        background-color: var(--primary-color);
+        position: relative;
+        z-index: 1001;
+    }
     
         .submenu {
             position: absolute;
@@ -169,11 +191,28 @@
         .login {
             height: 17rem;
         }
-        .nav-item {
-            cursor: pointer;
-            transition: color 0.3s ease
-        }
+     
+    .nav-item {
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
     
+    .nav-item a {
+        text-decoration: none;
+        color: #e4dede;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+
+    .nav-item a:hover {
+        color: #c5c2c2;
+    }
+
+    .nav-item a:active {
+        color: #aaaaaa;
+    }
+
         .nav-item:hover {
             color: #c5c2c2;
             
@@ -205,61 +244,72 @@
         .registerBtn:hover, .loginBtn:hover {
             color: #c5c2c2;
         }
+
+        .current-page {
+            color: var(--rare-color) !important;
+        }
     </style>
     
     <svelte:head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@3.2.1/event-calendar.min.css">
     </svelte:head>
     
-    <!-- <h4 class="nav-item" class:active={$currPage === '/calendar'} on:click={()=> setCurrentPage('/calendar')}><a href='/calendar'>Calendar</a></h4> -->
-
+    
 
     <div class="top-bar">
-        <h4 class="nav-item" class:active={$currPage === '/'}><a href='/'>Clock</a></h4>
-        <h4 class="nav-item" on:mouseenter={()=>toggleSubmenu('history')}>History</h4>
-        <h4 class="nav-item" class:active={$currPage === '/analytics'}><a href='/analytics'>Analytics</a></h4>
-        <h4 class="nav-item" on:mouseenter={()=>toggleSubmenu('theme')}>Theme</h4>
-        <h4 class="nav-item" class:active={$currPage === '/about'}><a href='/about'>About</a></h4>
-        <h4 class="nav-item" on:mouseenter={()=>toggleSubmenu('user')}>
-            {#if $user !== null}
-            {$user.username}
-            {:else}
-            Sign In
-            {/if}
+        <h4 class="nav-item"><a href='/' class:current-page={$currPage === '/'}>Clock</a></h4>
+        <h4 class="nav-item"><a href='#' on:mouseenter={() => toggleSubmenu('history')} class:current-page={$currPage.startsWith('/history')}>History</a></h4>
+        <h4 class="nav-item"><a href='/analytics' class:current-page={$currPage === '/analytics'}>Analytics</a></h4>
+        <h4 class="nav-item"><a href='#' on:mouseenter={() => toggleSubmenu('theme')}>Theme</a></h4>
+        <h4 class="nav-item"><a href='/about' class:current-page={$currPage === '/about'}>About</a></h4>
+        <h4 class="nav-item">
+            <a href='#' on:mouseenter={() => toggleSubmenu('user')}>
+                {#if $user !== null}
+                    {$user.username}
+                {:else}
+                    Sign In
+                {/if}
+            </a>
         </h4>        
-    
     </div>
     
     {#if activeSubmenu === 'theme'}
-        <div class="submenu" transition:slide={{ duration: 300, axis: 'y'}}>
-            <div class="nav-item" on:click={() => setTheme('default')}>Default</div>
-            <div class="nav-item" on:click={() => setTheme('nature')}>Nature</div>
-            <div class="nav-item" on:click={() => setTheme('ocean')}>Ocean</div>
-            <div class="nav-item" on:click={() => setTheme('warmth')}>Warmth</div>   
-         </div>
-    {/if}
+    <div class="submenu" 
+         transition:slide={{ duration: 300, axis: 'y'}}
+         on:mouseenter={clearSubmenuTimer}
+         on:mouseleave={() => submenuTimer = setTimeout(closeSubmenu, 6000)}>
+        <div class="nav-item" on:click={() => setTheme('default')}>Default</div>
+        <div class="nav-item" on:click={() => setTheme('nature')}>Nature</div>
+        <div class="nav-item" on:click={() => setTheme('ocean')}>Ocean</div>
+        <div class="nav-item" on:click={() => setTheme('warmth')}>Warmth</div>   
+    </div>
+{/if}
     
-    {#if activeSubmenu === 'history'}
-        <div class="submenu" transition:slide={{ duration: 300, axis: 'y'}}>
-                <a href="/history/calendar">Calendar</a>   
-                <a href="/history/record">Record</a>   
-         </div>
-    {/if}
-    
+{#if activeSubmenu === 'history'}
+    <div class="submenu" 
+         transition:slide={{ duration: 300, axis: 'y'}}
+         on:mouseenter={clearSubmenuTimer}
+         on:mouseleave={() => submenuTimer = setTimeout(closeSubmenu, 6000)}>
+        <a href="/history/calendar" class:current-page={$currPage.startsWith('/history/calendar')}>Calendar</a>   
+        <a href="/history/record" class:current-page={$currPage.startsWith('/history/record')}>Record</a>   
+    </div>
+{/if}
 
-    {#if activeSubmenu === 'user'}
-        <div class="submenu" transition:slide={{ duration: 300, axis: 'y'}}>
-            {#if $user !== null}
-                <a href="/profile">Profile</a>
-                <a href="/settings">Settings</a>
-                <Logout />
-            {:else}
+{#if activeSubmenu === 'user'}
+    <div class="submenu" 
+         transition:slide={{ duration: 300, axis: 'y'}}
+         on:mouseenter={clearSubmenuTimer}
+         on:mouseleave={() => submenuTimer = setTimeout(closeSubmenu, 6000)}>
+        {#if $user !== null}
+            <a href="/profile">Profile</a>
+            <a href="/settings">Settings</a>
+            <Logout />
+        {:else}
             <button class="registerBtn" on:click={() => toggleAuth('register')}>Register</button>    
             <button class="loginBtn" on:click={() => toggleAuth('login')}>Login</button>  
-            {/if}    
-         </div>
-    {/if}
-    
+        {/if}    
+    </div>
+{/if}
     {#if showLogin}
          <div class="auth-cont login" transition:slide={{ duration: 300, axis: 'x'}}>
             <Login />
