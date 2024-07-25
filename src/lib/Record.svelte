@@ -16,7 +16,7 @@ $: if ($user !== null && !$dataFetched){
     fetchFasts()
 }
 
-
+$: sortedFasts = [...$fasts].reverse();
 
 async function fetchFasts() {
         if ($dataFetched || $fasts.length > 0){
@@ -62,8 +62,8 @@ function getProgressBarWidth(percentCompleted) {
 }
 
 function getProgressBarColor(percentCompleted) {
-    if (percentCompleted < 33) return 'var(--lighter-color)'; 
-    if (percentCompleted < 66) return 'var(--secondary-color)'; 
+    if (percentCompleted < 33) return 'var(--secondary-color)'; 
+    if (percentCompleted < 66) return 'var(--lighter-color)'; 
     return 'var(--rare-color)'; 
 }
 
@@ -89,11 +89,11 @@ function progressOrStopped(fast){
     }
 }
 
-function showPercent(fast){
-    if(!fast.InProgress){
-        return `${(100 - fast.PercentRemaining).toFixed(1)}%`
+function showPercent(fast) {
+    if (fast.InProgress) {
+        return (100 - $currPerc).toFixed(1);
     } else {
-        return (100 - $currPerc).toFixed(2)
+        return (100 - fast.PercentRemaining).toFixed(1);
     }
 }
 
@@ -216,11 +216,11 @@ function showActualTime(fast){
         <p>No fasts recorded yet.</p>
     {:else}
         <div class="fast-list">
-            {#each $fasts as fast}
+            {#each sortedFasts as fast}
                 <div class="fast-card" on:click={() => handleFastClick(fast)}>
                     <div class="progress-bar" 
-                         style="width: {getProgressBarWidth(100 - fast.PercentRemaining)}; 
-                                background-color: {getProgressBarColor(100 - fast.PercentRemaining)};"></div>
+                    style="width: {showPercent(fast)}%; 
+                    background-color: {getProgressBarColor(parseFloat(showPercent(fast)))};"></div>
                     <div class="fast-content">
                         <div class="fast-header">
                             <span class="fast-duration">{fast.ExpectedDuration}h Fast</span>
