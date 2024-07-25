@@ -3,7 +3,7 @@
     import { aws_stages } from '../aws/stages';
 	import { signOut } from "aws-amplify/auth";
     import { user, userStore } from '$lib/auth/userStore';
-    import { hours, currPerc, startDate, futureDate, hasStarted } from '$lib/stores';
+    import { hours, currPerc, startDate, futureDate, hasStarted, totalTime, succeeded } from '$lib/stores';
 
     async function logOut(){
         if($user !== null){
@@ -29,9 +29,11 @@
                 "UserID": $user?.username,
                 "StartDate": $startDate.getTime(),
                 "EndDate": $futureDate.getTime(),
-                "InProgress": $hasStarted ? true : false,
+                "InProgress": $hasStarted,
                 "PercentCompleted": $currPerc,
-                "TotalDuration": $hours 
+                "ExpectedDuration": $hours,
+                "ActualDuration": $totalTime, 
+                "Succeeded": $succeeded
             }
         }
         let url = aws_stages.API_PUT_URL

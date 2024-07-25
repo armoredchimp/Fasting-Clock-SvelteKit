@@ -61,6 +61,9 @@
     }
    
 
+    function millisToHours(millis) {
+        return Math.round(millis / (60 * 60 * 1000) * 10) / 10; // Round to 1 decimal place
+    }
 
 
 
@@ -69,13 +72,14 @@
         const events = $fasts.map(fast => ({
             start: new Date(Number(fast.StartDate)),
             end: new Date(Number(fast.EndDate)),
-            title: showDuration ? `${fast.TotalDuration}h` : ``,
+            title: showDuration ? `${fast.ExpectedDuration}h` : ``,
             extendedProps: {
-                duration: Number(fast.TotalDuration),
+                expectedDuration: Number(fast.ExpectedDuration),
+                actualDuration: Number(fast.ActualDuration),
                 success: fast.Succeeded
             }
         }));
-        
+       
         if (ec) {
             ec.setOption('events', events);
         } else {
@@ -84,12 +88,14 @@
     }
 
     function renderEventContent(info) {
-        const duration = info.event.extendedProps.duration;
+        const expectedDuration = info.event.extendedProps.expectedDuration;
+        const actualDuration = millisToHours(info.event.extendedProps.actualDuration);
         const success = info.event.extendedProps.success;
-        const color = getColorForDuration(duration);
+        const color = getColorForDuration(actualDuration);
+        console.log(`Event: Expected ${expectedDuration}h, Actual ${actualDuration}h, Color: ${color}`);
         return {
-            html: `<div class="fast-event" style="background-color: ${color}; color: white;  padding: 1.2rem 5rem; font-weight: bold; font-size: 0.8em; white-space: nowrap;">
-                     ${info.event.title} : ${success ? 'Succeeded' : 'Incomplete'}
+            html: `<div class="fast-event" style="background-color: ${color}; color: white; padding: 1.2rem 5rem; font-weight: bold; font-size: 0.8em; white-space: nowrap;">
+                     ${info.event.title} (${actualDuration}h) : ${success ? 'Succeeded' : 'Incomplete'}
                    </div>`
         };
     }

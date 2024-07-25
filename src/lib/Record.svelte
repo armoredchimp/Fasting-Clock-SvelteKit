@@ -1,5 +1,5 @@
 <script>
-import { dataFetched, fasts, loading, currPerc } from "./stores";
+import { dataFetched, fasts, loading, currPerc, totalTime } from "./stores";
 import { user } from "./auth/userStore";
 import axios from "axios";
 import { aws_stages } from "../aws/stages";
@@ -96,6 +96,15 @@ function showPercent(fast){
         return (100 - $currPerc).toFixed(2)
     }
 }
+
+function showActualTime(fast){
+    if(!fast.InProgress){
+        return formatDuration(fast.ActualDuration)
+    } else {
+    }
+        return formatDuration($totalTime)
+}
+     
 
 </script>
 
@@ -198,7 +207,6 @@ function showPercent(fast){
     }
 </style>
 
-
 {#if $user !== null}
 <div class="container">
     <h2 class="title">Fast Records</h2>
@@ -215,16 +223,16 @@ function showPercent(fast){
                                 background-color: {getProgressBarColor(100 - fast.PercentRemaining)};"></div>
                     <div class="fast-content">
                         <div class="fast-header">
-                            <span class="fast-duration">{fast.TotalDuration}h Fast</span>
-                            <span class={`status-badge ${fast.Success ? 'status-success' : 'status-incomplete'}`}>
-                                {fast.Success ? 'Success' : 'Incomplete'}
+                            <span class="fast-duration">{fast.ExpectedDuration}h Fast</span>
+                            <span class={`status-badge ${fast.Succeeded ? 'status-success' : 'status-incomplete'}`}>
+                                {fast.Succeeded ? 'Success' : 'Incomplete'}
                             </span>
                         </div>
                         <div class="fast-details">
                             <p><strong>Start:</strong> {formatDate(fast.StartDate)}</p>
                             <p><strong>End:</strong> {formatDate(fast.EndDate)}</p>
                             <p><strong>Stopped:</strong> {progressOrStopped(fast)}</p>
-                            <p><strong>Actual Duration:</strong> {formatDuration(calculateStopTime(fast) - Number(fast.StartDate))}</p>
+                            <p><strong>Actual Duration:</strong> {showActualTime(fast)}</p>
                             <p><strong>Progress:</strong> {showPercent(fast)}</p>
                         </div>
                     </div>
@@ -234,4 +242,3 @@ function showPercent(fast){
     {/if}
 </div>
 {/if}
-

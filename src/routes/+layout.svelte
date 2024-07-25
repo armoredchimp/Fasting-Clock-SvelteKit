@@ -4,7 +4,7 @@
     import { getCurrentUser, fetchAuthSession} from 'aws-amplify/auth';
     import { onMount } from 'svelte';
     import { userStore, user } from '$lib/auth/userStore';
-    import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage } from '$lib/stores';
+    import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage, totalTime } from '$lib/stores';
     import axios from 'axios';
     import { aws_stages } from '../aws/stages';
     import { slide } from 'svelte/transition'
@@ -59,40 +59,46 @@
     }
     
     async function checkActiveFast(username: string){
-        try {
-            $loading = true;
-            const url = aws_stages.API_GET_URL.replace("{username}", username)
-            const response = await axios.get(url)
-            const activeFast = response.data
-    
-            if (activeFast){
-                console.log("Active fast data: ", activeFast);
-                hours.set(Number(activeFast.TotalDuration));
-                currPerc.set(Number(activeFast.PercentRemaining));
-                startDate.set(new Date(Number(activeFast.StartDate)));
-                futureDate.set(new Date(Number(activeFast.EndDate)));
-                hasStarted.set(true);
-                succeeded.set(false);
-                $loading = false;
-                console.log("Stores after setting:", {
-                    hours: $hours,
-                    currPerc: $currPerc,
-                    startDate: $startDate,
-                    futureDate: $futureDate,
-                    hasStarted: $hasStarted,
-                    succeeded: $succeeded
-                })
-            }else {
-                hasStarted.set(false)
-                succeeded.set(false)
-                $loading = false
-            }
-            
-        }catch(err){
-            console.error(err)
-            $loading = false
+    try {
+        $loading = true;
+        const url = aws_stages.API_GET_URL.replace("{username}", username);
+        const response = await axios.get(url);
+        const activeFast = response.data;
+
+        if (activeFast){
+            console.log("Active fast data: ", activeFast);
+            hours.set(Number(activeFast.ExpectedDuration));
+            currPerc.set(Number(activeFast.PercentRemaining));
+            startDate.set(new Date(Number(activeFast.StartDate)));
+            futureDate.set(new Date(Number(activeFast.EndDate)));
+            hasStarted.set(activeFast.InProgress);
+            succeeded.set(activeFast.Succeeded);
+            $loading = false;
+
+            // Calculate and set totalTime
+            const currentTime = new Date();
+            const elapsedTime = currentTime.getTime() - Number(activeFast.StartDate);
+            totalTime.set(elapsedTime);
+
+            console.log("Stores after setting:", {
+                hours: $hours,
+                currPerc: $currPerc,
+                startDate: $startDate,
+                futureDate: $futureDate,
+                hasStarted: $hasStarted,
+                succeeded: $succeeded,
+                totalTime: $totalTime
+            });
+        } else {
+            hasStarted.set(false);
+            succeeded.set(false);
+            $loading = false;
         }
+    } catch(err) {
+        console.error(err);
+        $loading = false;
     }
+}
     
     function toggleAuth(type){
         if (type === 'register') {

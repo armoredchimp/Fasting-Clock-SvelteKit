@@ -10,7 +10,7 @@
     import Stop from "$lib/Stop.svelte";
     import Stats from "$lib/Stats.svelte";
     import Login from "$lib/Login.svelte";
-    import { loading, hours, currPerc, succeeded, exceeded, startDate, futureDate, hasStarted,  remHours, remMins, remSeconds, currPage } from '$lib/stores';
+    import { loading, hours, currPerc, succeeded, exceeded, startDate, futureDate, hasStarted,  remHours, remMins, remSeconds, currPage, totalTime } from '$lib/stores';
     import { aws_stages } from "../aws/stages";
     import { user, registrationStatus } from "$lib/auth/userStore";
 	import Logout from "$lib/Logout.svelte";
@@ -85,18 +85,16 @@
     )
 
     async function putFast(){
-        if ($exceeded){
-            $futureDate = new Date()
-        }
         let data = {
             "pathParameters": {
                 "UserID": $user?.username,
                 "StartDate": $startDate.getTime(),
                 "EndDate": $futureDate.getTime(),
-                "InProgress": $hasStarted ? true : false,
+                "InProgress": $hasStarted,
                 "PercentRemaining": $currPerc,
-                "TotalDuration": $hours,
-                "Suceeded": $succeeded
+                "ExpectedDuration": $hours,
+                "ActualDuration": $totalTime,
+                "Succeeded": $succeeded
             }
         }
         let url = aws_stages.API_PUT_URL
@@ -205,7 +203,7 @@ h1, h2, p {
     }
 
     .stop {
-        margin-top: 10rem;
+        margin-top: 15rem;
         transform: translateX(3rem);
     }
     .stats-box {
