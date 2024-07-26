@@ -82,6 +82,13 @@
     left: 20.5rem;
     z-index: 1;
    }
+
+   .complete {
+    position: absolute;
+    top: 25.5rem;
+    left: 18rem;
+    z-index: 1;
+   }
  
    h1 {
     font-size: 4rem;
@@ -90,7 +97,9 @@
 </style>
 
 <div class="circle">
+    {#if !$succeeded}
     <div class="overlay" style="height: {$currPerc}%; transition: 0.1s ease-in"></div>
+    {/if}
     {#if $hasStarted === false && $succeeded === false}
    
     <div class="target-clock" >
@@ -100,9 +109,9 @@
     <div class="perc">
         <h1>{$currPerc.toFixed(2)} %</h1>
     </div>
-    {:else}
-    <div class="perc">
-        <h1>{$currPerc.toFixed(2)} %</h1>
+    {:else if $succeeded}
+    <div class="complete">
+        <h1>Complete!</h1>
     </div>
     {/if}
 

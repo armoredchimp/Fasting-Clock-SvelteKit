@@ -17,7 +17,7 @@
     
 
 
-    let startedApp = false;
+   
     
     
    onMount(()=>{
@@ -26,7 +26,7 @@
   
     
     
-    hasStarted.subscribe((n)=> startedApp = n)
+  
 
     
 
@@ -43,10 +43,9 @@
 
    export function handleStop(){
         console.log('stop received')
-        startedApp = false;
         $hasStarted = false;
-        $succeeded = false;
         putFast()
+        $succeeded = false;
         $currPerc = 50;
         $hours = 12;
         $loading = true;
@@ -57,17 +56,16 @@
     }
   
     function calcRemTime(){
-        if( startedApp === true){
+        if( $hasStarted === true && !$succeeded){
             if($remSeconds <= 0){
                 success()
             }
     }
 }
 
+
     function success(){
         console.log('success')
-        startedApp = false;
-        $hasStarted = false;
         if($currPerc <= 0){
             $exceeded = true
         }
@@ -78,7 +76,10 @@
     afterUpdate(()=>{
         if($hasStarted === true){
         setInterval(()=>{
-            calcRemTime()
+            if (!$succeeded){
+
+                calcRemTime()
+            }
         }, 1000);
         }
     }
@@ -219,13 +220,14 @@ h1, h2, p {
     <div class="title-container">
         <!-- <h1 class="title">Fasting Clock</h1> -->
     </div>
-    <!-- <div style="width: 10rem">
+    <div style="width: 10rem">
         <h4>{$hasStarted}</h4>
         <h4>{$succeeded}</h4>
-        <h4>{$futureDate}</h4>
-        <h4>{$startDate}</h4>
-        <h4>{$currPerc}</h4>
-    </div> -->
+        <!-- <h4>{$futureDate}</h4>
+        <h4>{$startDate}</h4> -->
+        <h4>{$currPerc.toFixed(2)}</h4>
+        <h4>{$remSeconds}</h4>
+    </div>
 </div>
 
 <div class="circle-stats">

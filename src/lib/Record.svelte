@@ -90,6 +90,20 @@ function progressOrStopped(fast){
 }
 
 function showPercent(fast) {
+    if (fast.Succeeded){
+        return `100.0 %`
+    }
+    if (fast.InProgress) {
+        return `${(100 - $currPerc).toFixed(1)}%`;
+    } else {
+        return `${(100 - fast.PercentRemaining).toFixed(1)}%`;
+    }
+
+}
+function returnPercent(fast) {
+    if (fast.Succeeded){
+        return 100
+    }
     if (fast.InProgress) {
         return (100 - $currPerc).toFixed(1);
     } else {
@@ -219,7 +233,7 @@ function showActualTime(fast){
             {#each sortedFasts as fast}
                 <div class="fast-card" on:click={() => handleFastClick(fast)}>
                     <div class="progress-bar" 
-                    style="width: {showPercent(fast)}%; 
+                    style="width: {returnPercent(fast)}%; 
                     background-color: {getProgressBarColor(parseFloat(showPercent(fast)))};"></div>
                     <div class="fast-content">
                         <div class="fast-header">

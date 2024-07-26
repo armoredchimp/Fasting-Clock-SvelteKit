@@ -9,7 +9,6 @@
 
     $: expectedDuration = $hours * 60 * 60 * 1000;
     $: actualDuration = $hasStarted ? $totalTime : ($futureDate - $startDate);
-    $: exceededTime = Math.max(0, actualDuration - expectedDuration);
 </script>
 
 <style>
@@ -37,8 +36,8 @@
         <h3>The {$hours}h fast was completed at {$futureDate.toLocaleString()}, good job!</h3>
         <h3>Expected duration: {formatTime(expectedDuration)}</h3>
         <h3>Actual duration: {formatTime(actualDuration)}</h3>
-        {#if exceededTime > 0}
-            <h3>Exceeded by: {formatTime(exceededTime)}</h3>
-        {/if}
+    
+        <h3>Exceeded by: {formatTime($totalTime - expectedDuration)}</h3>
+        
     {/if}
 </div>

@@ -71,15 +71,10 @@
             currPerc.set(Number(activeFast.PercentRemaining));
             startDate.set(new Date(Number(activeFast.StartDate)));
             futureDate.set(new Date(Number(activeFast.EndDate)));
-            hasStarted.set(activeFast.InProgress);
+            hasStarted.set(true);
             succeeded.set(activeFast.Succeeded);
             $loading = false;
-
-            // Calculate and set totalTime
-            const currentTime = new Date();
-            const elapsedTime = currentTime.getTime() - Number(activeFast.StartDate);
-            totalTime.set(elapsedTime);
-
+           
             console.log("Stores after setting:", {
                 hours: $hours,
                 currPerc: $currPerc,
@@ -90,11 +85,13 @@
                 totalTime: $totalTime
             });
         } else {
+            console.log('Error loading active fast')
             hasStarted.set(false);
             succeeded.set(false);
             $loading = false;
         }
     } catch(err) {
+        console.log('Critical error')
         console.error(err);
         $loading = false;
     }
