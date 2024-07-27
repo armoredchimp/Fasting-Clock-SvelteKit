@@ -3,7 +3,7 @@
 	import { onMount } from "svelte";
 
     onMount(()=>{
-        currPage.set('/analytics')
+        currPage.set('/user/settings')
     })
 </script>
 
@@ -21,4 +21,4 @@
 
 </style>
 
-<h1 class="coming-soon">Analytics page coming soon</h1>
+<h1 class="coming-soon">Settings page coming soon</h1>

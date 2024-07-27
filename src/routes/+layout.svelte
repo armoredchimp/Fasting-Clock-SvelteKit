@@ -304,8 +304,8 @@
          on:mouseenter={clearSubmenuTimer}
          on:mouseleave={() => submenuTimer = setTimeout(closeSubmenu, 6000)}>
         {#if $user !== null}
-            <a href="/profile">Profile</a>
-            <a href="/settings">Settings</a>
+            <a href="/user/profile">Profile</a>
+            <a href="/user/settings">Settings</a>
             <Logout />
         {:else}
             <button class="registerBtn" on:click={() => toggleAuth('register')}>Register</button>    
