@@ -3,7 +3,7 @@
     import { afterUpdate, onMount } from "svelte";
     import { Loading } from "carbon-components-svelte";
     import Circle from "$lib/Circle.svelte";
-    import Card from "$lib/Card.Svelte";
+    import Card from "$lib/Card.svelte";
     import Clock from "$lib/Clock.svelte";
     import LengthInput from "$lib/LengthInput.svelte";
     import Start from "$lib/Start.svelte";
@@ -11,7 +11,7 @@
     import Stats from "$lib/Stats.svelte";
     import Login from "$lib/Login.svelte";
     import { loading, hours, currPerc, succeeded, exceeded, startDate, futureDate, hasStarted,  remHours, remMins, remSeconds, currPage, totalTime } from '$lib/stores';
-    import { aws_stages } from "../aws/stages";
+    // import { aws_stages } from "../aws/stages";
     import { user, registrationStatus } from "$lib/auth/userStore";
 	import Logout from "$lib/Logout.svelte";
     
@@ -98,7 +98,8 @@
                 "Succeeded": $succeeded
             }
         }
-        let url = aws_stages.API_PUT_URL
+        // let url = aws_stages.API_PUT_URL
+        let url = process.env.API_PUT_URL
         console.log(data)
         axios.put(url, data)
         .then(response =>{

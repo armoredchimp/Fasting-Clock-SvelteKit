@@ -2,7 +2,7 @@
 import { dataFetched, fasts, loading, currPerc, totalTime } from "./stores";
 import { user } from "./auth/userStore";
 import axios from "axios";
-import { aws_stages } from "../aws/stages";
+// import { aws_stages } from "../aws/stages";
 import { onMount } from "svelte";
 import { Loading } from "carbon-components-svelte";
 
@@ -29,7 +29,8 @@ async function fetchFasts() {
             console.log($user)
             console.log('Fetching fasts for username:', username);
             // @ts-ignore
-            const url = aws_stages.API_GET_ALL_URL.replace("{username}", username);
+            const url = process.env.API_GET_ALL_URL.replace("{username}", username);
+            // const url = aws_stages.API_GET_ALL_URL.replace("{username}", username);
             const response = await axios.get(url);
             $fasts = response.data;
             $dataFetched = true;

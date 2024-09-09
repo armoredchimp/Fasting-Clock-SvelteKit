@@ -8,7 +8,7 @@
     import DayGrid from '@event-calendar/day-grid'
     import '@event-calendar/core/index.css';
     import './style/calendar.css'
-    import { aws_stages } from "../aws/stages";
+    // import { aws_stages } from "../aws/stages";
     import axios from "axios";
    
     let ec;
@@ -47,7 +47,8 @@
             const username = $user?.username
             console.log($user)
             console.log('Fetching fasts for username:', username);
-            const url = aws_stages.API_GET_ALL_URL.replace("{username}", username);
+            const url = process.env.API_GET_ALL_URL.replace("{username}", username);
+            // const url = aws_stages.API_GET_ALL_URL.replace("{username}", username);
             const response = await axios.get(url);
             $fasts = response.data;
             $dataFetched = true;

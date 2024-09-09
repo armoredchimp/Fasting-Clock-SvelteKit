@@ -61,7 +61,8 @@
     async function checkActiveFast(username: string){
     try {
         $loading = true;
-        const url = aws_stages.API_GET_URL.replace("{username}", username);
+        // const url = aws_stages.API_GET_URL.replace("{username}", username);
+        const url = process.env.API_GET_URL.replace("{username}", username);
         const response = await axios.get(url);
         const activeFast = response.data;
 
