@@ -1,6 +1,6 @@
 <script>
     import axios from 'axios';
-    import { aws_stages } from '../aws/stages';
+    // import { aws_stages } from '../aws/stages';
 	import { signOut } from "aws-amplify/auth";
     import { user, userStore } from '$lib/auth/userStore';
     import { hours, currPerc, startDate, futureDate, hasStarted, totalTime, succeeded } from '$lib/stores';
@@ -36,7 +36,8 @@
                 "Succeeded": $succeeded
             }
         }
-        let url = aws_stages.API_PUT_URL
+        // let url = aws_stages.API_PUT_URL
+        let url = process.env.API_PUT_URL
         console.log(data)
         axios.put(url, data)
         .then(response =>{
