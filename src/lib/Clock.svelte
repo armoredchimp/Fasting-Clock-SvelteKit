@@ -13,13 +13,7 @@
         }
     )
 
-    // $: hour = date.getHours();
-    // $: min = date.getMinutes();
-    // $: sec = date.getSeconds();
 
-    // let amPM = 'AM';
-
-    // $: mainHour = (hour >= 12) ? hour - 12 : hour
 
     onMount( ()=>{
         const interval = setInterval(()=>{

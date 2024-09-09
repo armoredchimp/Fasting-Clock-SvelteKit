@@ -2,35 +2,23 @@
     
     
     import { totalDuration, futureDate, currPerc, hasStarted, remSeconds, succeeded } from './stores';
-    import Clock from './Clock.svelte';
     import TargetClock from './TargetClock.svelte';
 	import { afterUpdate } from 'svelte';
 
 	
-
-    
     let remainingTime = 0;
-    // let end = new Date()
-
-  
-
-   
-
-   
-
-
+    
     function calcRemPerc(){
         if($hasStarted === true){
         let currentTime = new Date();
         // futureDate.update((n)=>end = n);
         remainingTime = $futureDate.getTime() - currentTime.getTime()
         if(remainingTime > 0){
-        currPerc.update((n)=>n = (remainingTime / $totalDuration) * 100)
-    }
-}   
+            currPerc.update((n)=>n = (remainingTime / $totalDuration) * 100)
+        }
+    }   
 }
 
-    
 
     afterUpdate(()=>{
         if($hasStarted === true){
@@ -62,13 +50,7 @@
     background-color: var(--secondary-color);
    }
 
-   .clock {
-    position: absolute;
-    top: 4rem;
-    left: 7.5rem;
-    z-index: 0;
 
-}
    .target-clock {
     position: absolute;
     top: 24.5rem;

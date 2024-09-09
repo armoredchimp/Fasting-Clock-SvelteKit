@@ -9,7 +9,7 @@ Basic SvelteKit fasting clock, with aws backend. Uses the following microservice
 TODO:
 
 - Fix calendar display colors etc.
-- Editable records
+- Editable records - update and delete as well (most work involved)
 - Save color themes and other user settings with cookies and/or local storage
 - Landing page
 - Hosting
@@ -18,6 +18,8 @@ TODO:
 Next phase:
 
 - Analytics
+- Profile page
+- Settings page
 - Sorting options for Records
 - Different calendar views
 - OAuth

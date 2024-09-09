@@ -221,12 +221,12 @@ h1, h2, p {
         <!-- <h1 class="title">Fasting Clock</h1> -->
     </div>
     <div style="width: 10rem">
-        <h4>{$hasStarted}</h4>
+        <!-- <h4>{$hasStarted}</h4>
         <h4>{$succeeded}</h4>
-        <!-- <h4>{$futureDate}</h4>
-        <h4>{$startDate}</h4> -->
+        <h4>{$futureDate}</h4>
+        <h4>{$startDate}</h4>
         <h4>{$currPerc.toFixed(2)}</h4>
-        <h4>{$remSeconds}</h4>
+        <h4>{$remSeconds}</h4> -->
     </div>
 </div>
 
