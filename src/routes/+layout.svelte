@@ -6,7 +6,7 @@
     import { userStore, user } from '$lib/auth/userStore';
     import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage, totalTime } from '$lib/stores';
     import axios from 'axios';
-    import { aws_stages } from '../aws/stages';
+    // import { aws_stages } from '../aws/stages';
     import { slide } from 'svelte/transition'
     import { navigating } from '$app/stores';
     import Login from '$lib/Login.svelte';
