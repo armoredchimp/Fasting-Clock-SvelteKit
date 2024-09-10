@@ -1,11 +1,13 @@
 // import { cognitoData } from "../aws/amplify";
-import { Amplify } from "aws-amplify";
+// import { Amplify } from "aws-amplify";
+const userPoolId = process.env.USER_POOL_ID
+const userPoolClientId = process.env.USER_POOL_CLIENT_ID
 
 const amplifyConfig = {
 	Auth: {
 		Cognito: {
-			userPoolId: process.env.USER_POOL_ID,
-			userPoolClientId: process.env.USER_POOL_CLIENT_ID,
+			userPoolId: userPoolId,
+			userPoolClientId: userPoolClientId,
 			passwordFormat: {
 				minLength: 8,
 				requireLowercase: true,
