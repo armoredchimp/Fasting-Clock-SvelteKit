@@ -16,6 +16,7 @@
     
     Amplify.configure(amplifyConfig);
     console.log(amplifyConfig)
+    console.log('aaaaa!')
 
 
     let activeSubmenu = null;
