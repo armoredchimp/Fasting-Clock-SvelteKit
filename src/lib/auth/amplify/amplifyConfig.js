@@ -1,12 +1,12 @@
 // import { cognitoData } from "../aws/amplify";
 // import { Amplify } from "aws-amplify";
-import { env } from '$env/dynamic/private'
 
 
-const userPoolId = env['USER_POOL_ID']
-const userPoolClientId = env['USER_POOL_CLIENT_ID']
 
-const amplifyConfig = {
+const userPoolId = import.meta.env.VITE_USER_POOL_ID
+const userPoolClientId = import.meta.env.VITE_USER_POOL_CLIENT_ID
+
+export const amplifyConfig = {
 	Auth: {
 		Cognito: {
 			userPoolId: userPoolId,
