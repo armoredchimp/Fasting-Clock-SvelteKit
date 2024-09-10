@@ -15,8 +15,7 @@
     import '../app.css'
     
     Amplify.configure(amplifyConfig);
-    console.log(amplifyConfig)
-    console.log('aaaaa!')
+    
 
 
     let activeSubmenu = null;
@@ -207,7 +206,6 @@
             top: 5rem;
             left: 0;
             width: 20rem;
-            height: 20rem;
             background-color: var(--primary-color);
             border-bottom-right-radius: 1rem;
             z-index: 1000;
