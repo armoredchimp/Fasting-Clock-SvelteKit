@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Amplify } from 'aws-amplify';
-    import amplifyConfig from '$lib/amplifyConfig';
+    import amplifyConfig from '$lib/auth/amplify/amplifyConfig';
     import { getCurrentUser, fetchAuthSession, fetchUserAttributes, updateUserAttribute} from 'aws-amplify/auth';
     import { onMount } from 'svelte';
     import { userStore, user } from '$lib/auth/userStore';
@@ -15,7 +15,9 @@
     import '../app.css'
     
     Amplify.configure(amplifyConfig);
-    
+    console.log(amplifyConfig)
+
+
     let activeSubmenu = null;
     let showReg = false;
     let showLogin = false;

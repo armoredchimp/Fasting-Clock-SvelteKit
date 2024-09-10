@@ -1,4 +1,5 @@
 // import { cognitoData } from "../aws/amplify";
+import { Amplify } from "aws-amplify";
 
 const amplifyConfig = {
 	Auth: {
