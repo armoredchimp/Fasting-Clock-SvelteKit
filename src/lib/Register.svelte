@@ -2,6 +2,7 @@
     import { createForm } from "svelte-forms-lib";
     import { signUp, confirmSignUp, signIn, getCurrentUser } from 'aws-amplify/auth';
     import { userStore } from '$lib/auth/userStore';
+    import { theme } from "./stores";
    
     let needsConfirm = false;
    
@@ -40,6 +41,7 @@
             options: {
                 userAttributes: {
                     email: values.email,
+                    'custom:theme':$theme
                 }
             }    
         });

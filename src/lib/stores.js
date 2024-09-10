@@ -11,6 +11,7 @@ export const loading = writable(false);
 export const currPage = writable('/');
 export const fasts = writable([])
 export const dataFetched = writable(false)
+export const theme = writable('default')
 
 export const time = readable(new Date(), function start(set) {
 	const interval = setInterval(() => {

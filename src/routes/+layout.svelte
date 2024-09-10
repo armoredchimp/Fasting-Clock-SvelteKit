@@ -1,10 +1,10 @@
 <script lang="ts">
     import { Amplify } from 'aws-amplify';
     import amplifyConfig from '$lib/amplifyConfig';
-    import { getCurrentUser, fetchAuthSession} from 'aws-amplify/auth';
+    import { getCurrentUser, fetchAuthSession, fetchUserAttributes, updateUserAttribute} from 'aws-amplify/auth';
     import { onMount } from 'svelte';
     import { userStore, user } from '$lib/auth/userStore';
-    import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage, totalTime } from '$lib/stores';
+    import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage, totalTime, theme } from '$lib/stores';
     import axios from 'axios';
     // import { aws_stages } from '../aws/stages';
     import { slide } from 'svelte/transition'
@@ -34,9 +34,30 @@
         document.body.classList.remove('nature','ocean','warmth');
         if(theme !== 'default'){
             document.body.classList.add(theme)
+            $theme = theme
+            handleAttributeUpdate('custom.theme', $theme)
         }
     }
     
+    async function handleAttributeUpdate(attributeKey, value) {
+        try {
+            await updateUserAttribute({
+                userAttribute: {
+                    attributeKey,
+                    value
+                }
+            })
+            console.log(`${attributeKey} updated to ${value}`)
+        } catch(err){
+            console.log(err)
+        }
+    }
+
+    async function retrieveUserAttributes(){
+        const atts = await fetchUserAttributes()
+        console.log(atts)
+    }
+
     async function checkAuth(){
         try {
             const {tokens} = await fetchAuthSession();
@@ -45,6 +66,7 @@
                
                 const currentUser = await getCurrentUser();
                 userStore.setUser(currentUser)
+                await retrieveUserAttributes()
                 await checkActiveFast(currentUser.username)
                 $loading = false
             }else {
@@ -303,7 +325,7 @@
     <div class="submenu" 
          transition:slide={{ duration: 300, axis: 'y'}}
          on:mouseenter={clearSubmenuTimer}
-         on:mouseleave={() => submenuTimer = setTimeout(closeSubmenu, 6000)}>
+         on:mouseleave={() => submenuTimer = setTimeout(closeSubmenu, 3000)}>
         {#if $user !== null}
             <a href="/user/profile">Profile</a>
             <a href="/user/settings">Settings</a>
