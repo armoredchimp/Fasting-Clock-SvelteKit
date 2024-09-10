@@ -58,6 +58,10 @@
     async function retrieveUserAttributes(){
         const atts = await fetchUserAttributes()
         console.log(atts)
+        console.log(atts.theme)
+        if(atts){
+            setTheme(atts.theme)
+        }
     }
 
     async function checkAuth(){
