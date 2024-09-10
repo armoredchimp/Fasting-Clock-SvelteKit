@@ -36,9 +36,9 @@
         document.body.classList.remove('nature','ocean','warmth');
         if(theme !== 'default'){
             document.body.classList.add(theme)
-            handleAttributeUpdate('custom:theme', $theme)
         }
         $theme = theme
+        handleAttributeUpdate('custom:theme', $theme)
     }
     
     async function handleAttributeUpdate(attributeKey, value) {
