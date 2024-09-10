@@ -41,6 +41,14 @@
         handleAttributeUpdate('custom:theme', $theme)
     }
     
+    function setThemeOnMount(theme){
+        document.body.classList.remove('nature','ocean','warmth');
+        if(theme !== 'default'){
+            document.body.classList.add(theme)
+        }
+        $theme = theme
+    }
+    
     async function handleAttributeUpdate(attributeKey, value) {
         try {
             await updateUserAttribute({
@@ -60,7 +68,7 @@
         console.log(atts)
         console.log(atts['custom:theme'])
         if(atts){
-            setTheme(atts['custom:theme'])
+            setThemeOnMount(atts['custom:theme'])
         }
     }
 
