@@ -47,7 +47,7 @@
             const username = $user?.username
             console.log($user)
             console.log('Fetching fasts for username:', username);
-            const url = import.meta.env.API_GET_ALL_URL.replace("{username}", username);
+            const url = import.meta.env.VITE_API_GET_ALL_URL.replace("{username}", username);
             // const url = aws_stages.API_GET_ALL_URL.replace("{username}", username);
             const response = await axios.get(url);
             $fasts = response.data;

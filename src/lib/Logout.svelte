@@ -37,7 +37,7 @@
             }
         }
         // let url = aws_stages.API_PUT_URL
-        let url = import.meta.env.API_PUT_URL
+        let url = import.meta.env.VITE_API_PUT_URL
         console.log(data)
         axios.put(url, data)
         .then(response =>{
