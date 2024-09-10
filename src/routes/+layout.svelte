@@ -58,9 +58,9 @@
     async function retrieveUserAttributes(){
         const atts = await fetchUserAttributes()
         console.log(atts)
-        console.log(atts.theme)
+        console.log(atts['custom:theme'])
         if(atts){
-            setTheme(atts.theme)
+            setTheme(atts['custom:theme'])
         }
     }
 
