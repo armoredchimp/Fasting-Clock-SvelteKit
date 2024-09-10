@@ -29,7 +29,7 @@ async function fetchFasts() {
             console.log($user)
             console.log('Fetching fasts for username:', username);
             // @ts-ignore
-            const url = process.env.API_GET_ALL_URL.replace("{username}", username);
+            const url = import.meta.env.API_GET_ALL_URL.replace("{username}", username);
             // const url = aws_stages.API_GET_ALL_URL.replace("{username}", username);
             const response = await axios.get(url);
             $fasts = response.data;

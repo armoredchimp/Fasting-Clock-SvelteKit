@@ -36,9 +36,9 @@
         document.body.classList.remove('nature','ocean','warmth');
         if(theme !== 'default'){
             document.body.classList.add(theme)
-            $theme = theme
-            handleAttributeUpdate('custom.theme', $theme)
+            handleAttributeUpdate('custom:theme', $theme)
         }
+        $theme = theme
     }
     
     async function handleAttributeUpdate(attributeKey, value) {
@@ -86,7 +86,7 @@
     try {
         $loading = true;
         // const url = aws_stages.API_GET_URL.replace("{username}", username);
-        const url = process.env.API_GET_URL.replace("{username}", username);
+        const url = import.meta.env.API_GET_URL.replace("{username}", username);
         const response = await axios.get(url);
         const activeFast = response.data;
 
