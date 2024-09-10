@@ -11,7 +11,8 @@ const amplifyConfig = {
 				requireUppercase: true,
 				requireNumbers: true,
 				requireSpecialCharacters: true
-			}
+			},
+			username: 'true'
 		}
 	}
 };
