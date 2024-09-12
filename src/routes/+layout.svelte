@@ -16,7 +16,7 @@
     
     Amplify.configure(amplifyConfig);
     
-
+    $: setTheme($theme) 
 
     let activeSubmenu = null;
     let showReg = false;
@@ -37,17 +37,23 @@
         if(theme !== 'default'){
             document.body.classList.add(theme)
         }
-        $theme = theme
-        handleAttributeUpdate('custom:theme', $theme)
+        if($theme !== theme){
+            $theme = theme
+            handleAttributeUpdate('custom:theme', $theme)
+        }
     }
-    
+        
+
     function setThemeOnMount(theme){
         document.body.classList.remove('nature','ocean','warmth');
         if(theme !== 'default'){
             document.body.classList.add(theme)
         }
-        $theme = theme
+        if($theme !== theme){
+            $theme = theme
+        }
     }
+
     
     async function handleAttributeUpdate(attributeKey, value) {
         try {
