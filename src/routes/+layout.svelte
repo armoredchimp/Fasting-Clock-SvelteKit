@@ -33,11 +33,11 @@
     })
     
     function setTheme(theme){
-        document.body.classList.remove('nature','ocean','warmth');
-        if(theme !== 'default'){
-            document.body.classList.add(theme)
-        }
         if($theme !== theme){
+            document.body.classList.remove('nature','ocean','warmth');
+            if(theme !== 'default'){
+                document.body.classList.add(theme)
+            }
             $theme = theme
             handleAttributeUpdate('custom:theme', $theme)
         }
@@ -45,11 +45,11 @@
         
 
     function setThemeOnMount(theme){
+        if($theme !== theme){
         document.body.classList.remove('nature','ocean','warmth');
         if(theme !== 'default'){
             document.body.classList.add(theme)
         }
-        if($theme !== theme){
             $theme = theme
         }
     }
