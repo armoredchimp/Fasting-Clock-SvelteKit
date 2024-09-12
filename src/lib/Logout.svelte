@@ -3,7 +3,10 @@
     // import { aws_stages } from '../aws/stages';
 	import { signOut } from "aws-amplify/auth";
     import { user, userStore } from '$lib/auth/userStore';
+    import { createEventDispatcher } from 'svelte';
     import { hours, currPerc, startDate, futureDate, hasStarted, totalTime, succeeded, theme } from '$lib/stores';
+
+    const dispatch = createEventDispatcher();
 
     async function logOut(){
         if($user !== null){
@@ -16,7 +19,7 @@
                 $hasStarted = false;
                 $currPerc = 50; 
                 $hours = 12
-                $theme = 'default'
+                dispatch('loggedOut')
             }catch(err) {
                 console.error(err)
             }

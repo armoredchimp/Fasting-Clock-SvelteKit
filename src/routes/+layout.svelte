@@ -16,7 +16,7 @@
     
     Amplify.configure(amplifyConfig);
     
-    $: setTheme($theme) 
+ 
 
     let activeSubmenu = null;
     let showReg = false;
@@ -348,7 +348,7 @@
         {#if $user !== null}
             <a href="/user/profile">Profile</a>
             <a href="/user/settings">Settings</a>
-            <Logout />
+            <Logout on:loggedOut={setTheme('default')}/>
         {:else}
             <button class="registerBtn" on:click={() => toggleAuth('register')}>Register</button>    
             <button class="loginBtn" on:click={() => toggleAuth('login')}>Login</button>  
