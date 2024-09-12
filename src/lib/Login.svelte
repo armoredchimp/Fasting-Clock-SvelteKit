@@ -12,6 +12,7 @@
             let errors = {};
             if (!values.username) errors.username = 'Username is required';
             if (!values.password) errors.password = 'Password is required';
+            if (values.password.length < 8) errors.password = 'Password must be 8 characters or more'
             return errors;
         },
         onSubmit: async (values) => {
@@ -28,6 +29,7 @@
             const { isSignedIn, nextStep } = await signIn({
                 username: values.username,
                 password: values.password,
+            
             });
             if (isSignedIn) {
                 const currentUser = await getCurrentUser();
