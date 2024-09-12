@@ -23,7 +23,9 @@
     let showLogin = false;
     let submenuTimer: number | null = null
 
-
+    $: if (){
+       
+    }
     $: if ($navigating){
         closeSubmenu()
     }
@@ -348,7 +350,7 @@
         {#if $user !== null}
             <a href="/user/profile">Profile</a>
             <a href="/user/settings">Settings</a>
-            <Logout on:loggedOut={setTheme('default')}/>
+            <Logout/>
         {:else}
             <button class="registerBtn" on:click={() => toggleAuth('register')}>Register</button>    
             <button class="loginBtn" on:click={() => toggleAuth('login')}>Login</button>  
