@@ -23,9 +23,7 @@
     let showLogin = false;
     let submenuTimer: number | null = null
 
-    $: if (){
-       
-    }
+   
     $: if ($navigating){
         closeSubmenu()
     }
