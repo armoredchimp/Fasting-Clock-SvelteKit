@@ -4,7 +4,7 @@
     import { getCurrentUser, fetchAuthSession, fetchUserAttributes, updateUserAttribute} from 'aws-amplify/auth';
     import { onMount } from 'svelte';
     import { userStore, user } from '$lib/auth/userStore';
-    import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage, totalTime, theme } from '$lib/stores';
+    import { hours, currPerc, startDate, futureDate, hasStarted, succeeded, loading, currPage, totalTime, showLogin, showReg, theme } from '$lib/stores';
     import axios from 'axios';
     // import { aws_stages } from '../aws/stages';
     import { slide } from 'svelte/transition'
@@ -19,8 +19,6 @@
  
 
     let activeSubmenu = null;
-    let showReg = false;
-    let showLogin = false;
     let submenuTimer: number | null = null
 
    
@@ -142,11 +140,11 @@
     
     function toggleAuth(type){
         if (type === 'register') {
-            showReg = !showReg;
-            showLogin = false;
+            $showReg = !$showReg;
+            $showLogin = false;
         } else if (type === 'login') {
-            showLogin = !showLogin;
-            showReg = false;
+            $showLogin = !showLogin;
+            $showReg = false;
         }
     }
     
@@ -172,10 +170,10 @@
     }
 
     function closeSubmenu(){
-        if(!showReg && !showLogin){
+        if(!$showReg && !$showLogin){
             activeSubmenu = null;
-            showReg = false;
-            showLogin = false;
+            $showReg = false;
+            $showLogin = false;
 
         }
     }
@@ -355,13 +353,13 @@
         {/if}    
     </div>
 {/if}
-    {#if showLogin}
+    {#if $showLogin}
          <div class="auth-cont login" transition:slide={{ duration: 300, axis: 'x'}}>
             <Login />
          </div>
     {/if}
     
-    {#if showReg}
+    {#if $showReg}
          <div class="auth-cont" transition:slide={{ duration: 300, axis: 'x'}}>
             <Register />
          </div>

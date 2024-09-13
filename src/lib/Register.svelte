@@ -17,6 +17,7 @@
             let errors = {};
             if (!values.username) errors.username = 'Username is required';
             if (!values.password) errors.password = 'Password is required';
+            if (values.password.length < 8) errors.password = 'Password must be 8 characters or more'
             if (!values.email) errors.email = 'Email is required';
             if (needsConfirm && !values.confCode) errors.confCode = 'Confirmation code is required';
             return errors;
