@@ -143,7 +143,7 @@
             $showReg = !$showReg;
             $showLogin = false;
         } else if (type === 'login') {
-            $showLogin = !showLogin;
+            $showLogin = !$showLogin;
             $showReg = false;
         }
     }
