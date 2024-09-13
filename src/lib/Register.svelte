@@ -2,7 +2,7 @@
     import { createForm } from "svelte-forms-lib";
     import { signUp, confirmSignUp, signIn, getCurrentUser } from 'aws-amplify/auth';
     import { userStore } from '$lib/auth/userStore';
-    import { theme } from "./stores";
+    import { showLogin, showReg, theme } from "./stores";
    
     let needsConfirm = false;
    
@@ -80,6 +80,8 @@
             if (isSignedIn) {
                 const currentUser = await getCurrentUser();
                 userStore.setUser(currentUser);
+                $showReg = false;
+                $showLogin = false
             } else {
                 console.log('Failed to Login after registration');
             }
