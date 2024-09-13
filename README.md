@@ -10,9 +10,7 @@ TODO:
 
 - Fix calendar display colors etc.
 - Editable records - update and delete as well (most work involved)
-- Save color themes and other user settings with cookies and/or local storage
 - Landing page
-- Hosting
 - Media queries
 
 Next phase:
